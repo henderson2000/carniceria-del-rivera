@@ -1,0 +1,14 @@
+{
+  "name": "carniceria-del-rivera",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Tienda online de Del Rivera · Carnicería & Pollería (Córdoba)",
+  "scripts": {
+    "dev": "node dev-server.js"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.9.0"
+  },
+  "engines": { "node": ">=20" }
+}
