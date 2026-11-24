@@ -227,6 +227,10 @@
 
   .toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,16px);background:var(--tinta);color:#fff;padding:11px 20px;border-radius:999px;font-weight:600;font-size:.92rem;opacity:0;transition:.25s;z-index:70;pointer-events:none;white-space:nowrap}
   .toast.ver{opacity:1;transform:translate(-50%,0)}
+  .toast.con-accion{display:flex;align-items:center;gap:14px;padding:8px 8px 8px 18px;max-width:calc(100vw - 24px)}
+  .toast.con-accion.ver{pointer-events:auto}
+  .toast-btn{border:none;background:#fff;color:var(--vino);font:inherit;font-weight:800;font-size:.88rem;padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .toast-btn:hover{background:#f6e9e6}
 
   /* Sin stock */
   .prod.agotado .foto img{filter:grayscale(1);opacity:.55}
@@ -794,7 +798,20 @@ const kgTxt = g => (g/1000).toLocaleString("es-AR") + " kg";
 const prod = id => TIENDA.productos.find(p => p.id === id);
 const esUrlFoto = f => /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/[\w\-./%]+$/i.test(f) || /^\/_local\/[\w\-.]+$/.test(f);
 const fotoUrl = p => !p || !p.foto ? "" : esUrlFoto(p.foto) ? p.foto : `products/${p.foto}.webp`;
-let tt; function toast(t){ const el = $("toast"); el.textContent = t; el.classList.add("ver"); clearTimeout(tt); tt = setTimeout(()=>el.classList.remove("ver"), 2000); }
+let tt, accionToast = null;
+function toast(t, accion){
+  const el = $("toast"); el.textContent = t; accionToast = null; el.classList.remove("con-accion");
+  if(accion){
+    accionToast = accion.fn;
+    const b = document.createElement("button"); b.className = "toast-btn"; b.textContent = accion.label; el.appendChild(b);
+    el.classList.add("con-accion");
+  }
+  el.classList.add("ver"); clearTimeout(tt); tt = setTimeout(() => { el.classList.remove("ver"); accionToast = null; }, accion ? 5000 : 2000);
+}
+$("toast").addEventListener("click", e => {
+  if(!e.target.closest(".toast-btn") || !accionToast) return;
+  const fn = accionToast; accionToast = null; clearTimeout(tt); $("toast").classList.remove("ver"); fn();
+});
 
 // Sanea lo que llega de la base (los datos guardados no se dan por buenos)
 function sanear(d){
@@ -887,7 +904,16 @@ function confirmar(){
 // ===== Carrito =====
 $("lineas").addEventListener("click", e => {
   const q = e.target.closest("[data-quitar]");
-  if(q){ const it = carrito[q.dataset.quitar]; if(it){ const n = prod(it.id); delete carrito[q.dataset.quitar]; actualizar(); toast(`Quitaste ${n ? n.nombre : "el producto"} del pedido`); } return; }
+  if(q){
+    const k = q.dataset.quitar, it = carrito[k]; if(!it) return;
+    const n = prod(it.id), copia = {...it};
+    delete carrito[k]; actualizar();
+    toast(`Quitaste ${n ? n.nombre : "el producto"}`, {label:"Deshacer", fn: () => {
+      if(carrito[k]) carrito[k].g += copia.g; else carrito[k] = copia;   // si mientras tanto lo volvió a agregar, se suman
+      actualizar(); toast(`${n ? n.nombre : "El producto"} volvió al pedido`);
+    }});
+    return;
+  }
   const b = e.target.closest("[data-k]"); if(!b) return;
   const it = carrito[b.dataset.k]; if(!it) return;
   it.g += +b.dataset.d;
