@@ -188,6 +188,7 @@ export function armarPedido(b, catalogo){
   if(!nombre) return {error:"Falta el nombre"};
   if(whatsapp.replace(/\D/g,"").length < 8) return {error:"Falta un WhatsApp válido"};
   if(!Array.isArray(b.items) || !b.items.length || b.items.length > 60) return {error:"El pedido está vacío"};
+  if(b.entrega === "uber" && solo(b.direccion, 150).length < 5) return {error:"Falta la dirección de entrega"};
   const prods = new Map((catalogo?.productos || []).map(p => [p.id, p]));
   const cats = new Map((catalogo?.categorias || []).map(c => [c.id, c.nombre]));
   const items = [];
@@ -200,7 +201,8 @@ export function armarPedido(b, catalogo){
   if(!items.length) return {error:"Los productos del pedido ya no están disponibles"};
   const ts = Date.now();
   return {pedido:{id:b.id, ts, nombre, whatsapp, items, total: items.reduce((s,i) => s + i.subtotal, 0),
-    retiro:{dia:solo(b.dia, 40), hora:solo(b.hora, 15)}, pago:solo(b.pago, 60), obs:solo(b.obs, 300)}};
+    retiro:{dia:solo(b.dia, 40), hora:solo(b.hora, 15)}, pago:solo(b.pago, 60), obs:solo(b.obs, 300),
+    entrega: b.entrega === "uber" ? "uber" : "retiro", direccion: b.entrega === "uber" ? solo(b.direccion, 150) : ""}};
 }
 // "2026-11-24" en hora de Argentina (UTC-3) → milisegundos
 export function inicioDia(fecha){ return /^\d{4}-\d{2}-\d{2}$/.test(fecha || "") ? Date.parse(fecha + "T00:00:00-03:00") : NaN; }

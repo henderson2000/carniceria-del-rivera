@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Del Rivera · Carnicería &amp; Pollería</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<meta name="description" content="Del Rivera · Carnicería & Pollería en Córdoba. Elegí tus cortes online, reservá el retiro y pasá a buscarlos. Desde 2013.">
+<meta name="description" content="Del Rivera · Carnicería & Pollería en Córdoba. Elegí tus cortes online, y retiralos en el local o pedí envío por Uber. Desde 2013.">
 <meta name="theme-color" content="#7b282a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -213,9 +213,6 @@
   .alias{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border:1px dashed var(--vino);border-radius:10px;padding:10px 12px;margin:8px 0}
   .alias code{font-family:var(--sans);font-weight:700;font-size:1rem;letter-spacing:.3px}
   .copiar{border:none;background:var(--vino);color:#fff;border-radius:8px;padding:7px 12px;font-weight:700;font-size:.8rem;cursor:pointer}
-  .subops{display:flex;gap:8px;margin:8px 0 4px;flex-wrap:wrap}
-  .subop{border:1px solid var(--linea);background:#fff;border-radius:999px;padding:7px 12px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer}
-  .subop.on{background:var(--tinta);border-color:var(--tinta);color:#fff}
   .panel .pie{padding:18px 24px;border-top:1px solid var(--linea);background:#fff}
   .total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
   .total span{color:var(--gris)}
@@ -458,6 +455,7 @@
   .ped-datos{display:flex;flex-wrap:wrap;gap:6px 14px;margin:8px 0;font-size:.85rem;color:var(--tinta)}
   .ped-wa{display:inline-flex;align-items:center;gap:5px;color:var(--verde);font-weight:700;text-decoration:none}
   .ped-wa svg{width:16px;height:16px}
+  .ped-uber{color:var(--vino);font-weight:600}
   .ped-items{list-style:none;border-top:1px dashed var(--linea);padding-top:8px}
   .ped-items li{display:flex;justify-content:space-between;gap:10px;font-size:.88rem;padding:3px 0}
   .ped-items i{color:var(--vino);font-style:normal}
@@ -532,7 +530,7 @@
             <div class="hero-txt">
         <div class="kicker">De nuestro mostrador a tu mesa</div>
         <h1>Buena carne.<br>Buenos <em>momentos.</em></h1>
-        <p>Los cortes de siempre, con la calidad de Del Rivera. Elegí online y pasá a buscar tu pedido.</p>
+        <p>Los cortes de siempre, con la calidad de Del Rivera. Elegí online y retiralo en el local, o pedí que te lo mandemos por Uber.</p>
         <a href="#cortes" class="btn">Elegí tus cortes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
         <div class="confianza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg> Frescura y confianza desde 2013</div>
       </div>
@@ -541,8 +539,8 @@
 
     <div class="pasos" id="como">
       <div class="paso"><div class="ic"><svg viewBox="0 0 24 24"><path d="M2 3h3l2.6 12.4a1 1 0 0 0 1 .8h9.7a1 1 0 0 0 1-.8L21 7H6"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg></div><div><h3>Elegí a tu gusto</h3><p>Cortes frescos, por el peso que necesitás.</p></div></div>
-      <div class="paso"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div><div><h3>Reservá tu retiro</h3><p>Elegí el día y horario que te quede cómodo.</p></div></div>
-      <div class="paso"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6v10H3z"/><path d="M9 20v-6h6v6"/></svg></div><div><h3>Te esperamos en el local</h3><p>Tu pedido listo. Sin envíos, sin vueltas.</p></div></div>
+      <div class="paso"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div><div><h3>Elegí cómo lo recibís</h3><p>Retiro en el local o envío por Uber, el día y horario que te quede cómodo.</p></div></div>
+      <div class="paso"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 16V8h10v8M13 11h4l3 3v2h-7"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></div><div><h3>Lo coordinamos por WhatsApp</h3><p>Te confirmamos el pedido y, si es envío, el costo del Uber.</p></div></div>
     </div>
   </div>
 </header>
@@ -578,7 +576,7 @@
         </a>
         <div class="dato">
           <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-          <div><b>Solo retiro en el local</b><span id="cHor">Lunes a sábado · 9 a 12 h y 17 a 19 h</span></div>
+          <div><b>Retiro en el local o envío por Uber</b><span id="cHor">Lunes a sábado · 9 a 12 h y 17 a 19 h</span></div>
         </div>
       </div>
     </div>
@@ -622,22 +620,30 @@
     <div class="cuerpo">
       <div id="lineas"></div>
       <div class="retiro" id="retiro">
-        <h4>Reservá tu retiro</h4>
+        <h4>Tus datos</h4>
         <div class="dos">
           <div><label for="nombre">Nombre</label><input id="nombre" placeholder="¿A nombre de quién?" autocomplete="name"></div>
           <div><label for="wa">Tu WhatsApp</label><input id="wa" type="tel" inputmode="tel" placeholder="351 123 4567" autocomplete="tel"></div>
         </div>
+        <h4 style="margin-top:8px">¿Cómo lo recibís?</h4>
+        <div class="pagos" id="entregas">
+          <button class="pago" data-e="retiro"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6v10H3z"/><path d="M9 20v-6h6v6"/></svg></span><span><b>Retiro en el local</b><small id="retiroDir">Pasás a buscarlo por el local.</small></span></button>
+          <button class="pago" data-e="uber"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 16V8h10v8M13 11h4l3 3v2h-7"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span><span><b>Envío con Uber</b><small>Sujeto al costo del servicio de Uber, que pagás vos. Lo coordinamos por WhatsApp.</small></span></button>
+        </div>
+        <div id="dirBox" style="display:none">
+          <label for="dir">Dirección de entrega</label>
+          <input id="dir" placeholder="Calle, número, barrio (y depto si hace falta)" autocomplete="street-address">
+        </div>
         <div class="dos">
-          <div><label for="dia">Día</label><select id="dia"></select></div>
-          <div><label for="hora">Horario</label><select id="hora"></select></div>
+          <div><label for="dia" id="diaLab">Día de retiro</label><select id="dia"></select></div>
+          <div><label for="hora" id="horaLab">Horario</label><select id="hora"></select></div>
         </div>
         <label for="obs">Aclaraciones (opcional)</label>
         <textarea id="obs" rows="2" placeholder="Ej: milanesas bien finitas, bifes gruesos…"></textarea>
         <h4 style="margin-top:8px">¿Cómo pagás?</h4>
         <div class="pagos" id="pagos">
           <button class="pago" data-p="transferencia"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6M5 10v8M19 10v8M9 10v8M15 10v8M3 20h18"/></svg></span><span><b>Transferencia</b><small>Alias o CBU. Te confirmamos el importe final por WhatsApp.</small></span></button>
-          <button class="pago" data-p="tarjeta"><span class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></span><span><b>Tarjeta de débito o crédito</b><small>Con link de pago o en el posnet del local.</small></span></button>
-          <button class="pago" data-p="local"><span class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></svg></span><span><b>Pago en el local</b><small>Pagás en efectivo cuando retirás.</small></span></button>
+          <button class="pago" data-p="local"><span class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></svg></span><span><b id="efTit">Pago en el local</b><small id="efTxt">Pagás en efectivo cuando retirás.</small></span></button>
         </div>
         <div class="pago-det" id="pagoDet" style="display:none"></div>
       </div>
@@ -919,7 +925,11 @@ function armarMensaje(total){
   let m = `¡Hola Del Rivera! ${nombre ? "Soy "+nombre+". " : ""}Quiero reservar este pedido:\n\n`;
   ks.forEach(k => { const it = carrito[k];
     m += `• ${pesoTxt(it.g)} de ${prod(it.id).nombre}${it.prep ? " — "+it.prep : ""}${it.nota ? " ("+it.nota+")" : ""}\n`; });
-  m += `\nTotal estimado: ${fmt(total)}\nRetiro: ${dia} a las ${hora}`;
+  m += `\nTotal estimado: ${fmt(total)}`;
+  if(entrega === "uber"){
+    const dir = $("dir").value.trim();
+    m += `\nEntrega: Envío con Uber${dir ? " a " + dir : ""} (el costo del envío lo pago yo)\nDía: ${dia}, ${hora} aprox.`;
+  } else m += `\nEntrega: Retiro en el local, ${dia} a las ${hora}`;
   if(pago) m += `\nPago: ${pagoTexto()}`;
   if(obs) m += `\nAclaraciones: ${obs}`;
   a.href = ks.length ? `https://wa.me/${TIENDA.ajustes.whatsapp}?text=${encodeURIComponent(m)}` : "#";
@@ -927,15 +937,25 @@ function armarMensaje(total){
 }
 
 // ===== Pago =====
-let pago = "", tarjetaModo = "link";
-const PAGO_TXT = {transferencia:"Transferencia", local:"Efectivo en el local"};
+let pago = "", entrega = "retiro";
 function pagoTexto(){
-  if(pago==="tarjeta") return tarjetaModo==="link" ? "Tarjeta (link de pago por WhatsApp)" : "Tarjeta en el local (posnet)";
-  return PAGO_TXT[pago] || "";
+  if(pago === "transferencia") return "Transferencia";
+  if(pago === "local") return entrega === "uber" ? "Efectivo (a coordinar)" : "Efectivo en el local";
+  return "";
+}
+const entregaTexto = () => entrega === "uber" ? "Envío con Uber (costo del envío a cargo del cliente)" : "Retiro en el local";
+function pintarEntrega(){
+  document.querySelectorAll("[data-e]").forEach(b => b.classList.toggle("on", b.dataset.e === entrega));
+  const uber = entrega === "uber";
+  $("dirBox").style.display = uber ? "" : "none";
+  $("diaLab").textContent = uber ? "Día de entrega" : "Día de retiro";
+  $("horaLab").textContent = uber ? "Horario aproximado" : "Horario";
+  $("efTit").textContent = uber ? "Efectivo" : "Pago en el local";
+  $("efTxt").textContent = uber ? "Lo coordinamos por WhatsApp junto con el envío." : "Pagás en efectivo cuando retirás.";
 }
 function pintarPago(){
   const A = TIENDA.ajustes;
-  document.querySelectorAll(".pago").forEach(b => b.classList.toggle("on", b.dataset.p===pago));
+  document.querySelectorAll("#pagos .pago").forEach(b => b.classList.toggle("on", b.dataset.p===pago));
   const det = $("pagoDet");
   if(!pago){ det.style.display="none"; return; }
   det.style.display="";
@@ -944,20 +964,17 @@ function pintarPago(){
     ${A.alias ? `<div class="alias"><span><small style="color:var(--gris)">Alias</small><br><code>${esc(A.alias)}</code></span><button class="copiar" data-c="${esc(A.alias)}">Copiar</button></div>` : ""}
     ${A.cbu ? `<div class="alias"><span><small style="color:var(--gris)">CBU / CVU</small><br><code style="font-size:.85rem">${esc(A.cbu)}</code></span><button class="copiar" data-c="${esc(A.cbu)}">Copiar</button></div>` : ""}
     <p>${A.titular ? "Titular: "+esc(A.titular)+". " : ""}Mandanos el comprobante por WhatsApp.</p>`;
-  else if(pago==="tarjeta") det.innerHTML = `
-    <div class="subops">
-      <button class="subop ${tarjetaModo==='link'?'on':''}" data-t="link">Link de pago</button>
-      <button class="subop ${tarjetaModo==='posnet'?'on':''}" data-t="posnet">Posnet en el local</button>
-    </div>
-    <p>${tarjetaModo==='link'
-      ? "Cuando pesamos tu pedido te mandamos por WhatsApp un <b>link de Mercado Pago</b> con el importe exacto. Pagás con débito o crédito desde el celular."
-      : "Pagás con débito o crédito cuando retirás tu pedido."}</p>`;
-  else det.innerHTML = `<p>Pagás en efectivo cuando pasás a retirar. Te cobramos según el peso exacto.</p>`;
+  else det.innerHTML = entrega === "uber"
+    ? `<p>El pago en efectivo con envío lo coordinamos por WhatsApp. El importe final depende del peso exacto, más el costo del Uber.</p>`
+    : `<p>Pagás en efectivo cuando pasás a retirar. Te cobramos según el peso exacto.</p>`;
 }
+$("entregas").addEventListener("click", e => {
+  const b = e.target.closest("[data-e]"); if(!b) return;
+  entrega = b.dataset.e; pintarEntrega(); pintarPago(); actualizar();
+  if(entrega === "uber") setTimeout(() => $("dir").focus({preventScroll:false}), 50);
+});
 $("pagos").addEventListener("click", e => { const b = e.target.closest(".pago"); if(b){ pago = b.dataset.p; pintarPago(); actualizar(); } });
 $("pagoDet").addEventListener("click", async e => {
-  const t = e.target.closest(".subop");
-  if(t){ tarjetaModo = t.dataset.t; pintarPago(); actualizar(); return; }
   const c = e.target.closest(".copiar");
   if(c){ try{ await navigator.clipboard.writeText(c.dataset.c); toast("Copiado"); }catch(err){ toast("Mantené apretado para copiar"); } }
 });
@@ -966,6 +983,7 @@ $("enviar").addEventListener("click", e => {
   if(!pago){ e.preventDefault(); toast("Elegí cómo vas a pagar"); $("pagos").scrollIntoView({behavior:"smooth",block:"center"}); return; }
   if(!$("nombre").value.trim()){ e.preventDefault(); toast("Poné tu nombre para la reserva"); $("nombre").focus(); return; }
   if($("wa").value.replace(/\D/g,"").length < 8){ e.preventDefault(); toast("Poné tu número de WhatsApp"); $("wa").focus(); return; }
+  if(entrega === "uber" && $("dir").value.trim().length < 5){ e.preventDefault(); toast("Poné la dirección de entrega"); $("dir").focus(); return; }
   registrarPedido();
 });
 
@@ -975,15 +993,15 @@ let pedidoId = "", pedidoFirma = "";
 function nuevoId(){ try{ return crypto.randomUUID(); }catch(e){ return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12); } }
 function registrarPedido(){
   const cuerpo = {nombre:$("nombre").value.trim(), whatsapp:$("wa").value.trim(), dia:$("dia").value, hora:$("hora").value,
-    pago:pagoTexto(), obs:$("obs").value.trim(), items:Object.values(carrito).map(it => ({id:it.id, g:it.g, prep:it.prep, nota:it.nota}))};
+    pago:pagoTexto(), obs:$("obs").value.trim(), entrega, direccion: entrega === "uber" ? $("dir").value.trim() : "", items:Object.values(carrito).map(it => ({id:it.id, g:it.g, prep:it.prep, nota:it.nota}))};
   const firma = JSON.stringify(cuerpo);
   if(firma !== pedidoFirma){ pedidoFirma = firma; pedidoId = nuevoId(); }
-  try{ localStorage.setItem("delrivera_cliente", JSON.stringify({nombre:cuerpo.nombre, wa:cuerpo.whatsapp})); }catch(e){}
+  try{ localStorage.setItem("delrivera_cliente", JSON.stringify({nombre:cuerpo.nombre, wa:cuerpo.whatsapp, dir:$("dir").value.trim()})); }catch(e){}
   fetch("/api/pedido", {method:"POST", keepalive:true, headers:{"Content-Type":"application/json"}, body: JSON.stringify({...cuerpo, id:pedidoId})})
     .catch(() => {});
 }
 // Recordar nombre y WhatsApp del cliente para la próxima compra
-try{ const c = JSON.parse(localStorage.getItem("delrivera_cliente")); if(c){ $("nombre").value = c.nombre || ""; $("wa").value = c.wa || ""; } }catch(e){}
+try{ const c = JSON.parse(localStorage.getItem("delrivera_cliente")); if(c){ $("nombre").value = c.nombre || ""; $("wa").value = c.wa || ""; $("dir").value = c.dir || ""; } }catch(e){}
 
 // ===== Días, horarios y contacto =====
 // Minutos desde medianoche de un horario escrito como "9:00", "10.30" o "18"
@@ -1016,16 +1034,17 @@ function pintarRetiroYContacto(){
   $("dia").innerHTML = diasRetiro.map(d => `<option ${d.txt===prevDia?'selected':''}>${d.txt}</option>`).join("") || "<option>A coordinar</option>";
   pintarHoras();
   $("cDir").textContent = A.direccion;
+  $("retiroDir").textContent = A.direccion ? "Pasás a buscarlo por " + A.direccion.split("·")[0].trim() + "." : "Pasás a buscarlo por el local.";
   $("cDirLink").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(A.direccion.replace("·",""));
   $("cHor").textContent = A.horarioTexto;
   const w = A.whatsapp;
   $("cWa").textContent = w.length >= 12 ? `+${w.slice(0,2)} ${w.slice(2,3)} ${w.slice(3,6)} ${w.slice(6,9)}-${w.slice(9)}` : "+" + w;
   $("cWaLink").href = "https://wa.me/" + w;
 }
-["nombre","wa","hora","obs"].forEach(id => $(id).addEventListener("input", actualizar));
+["nombre","wa","dir","hora","obs"].forEach(id => $(id).addEventListener("input", actualizar));
 $("dia").addEventListener("change", () => { pintarHoras(); actualizar(); });
 
-function pintarTodo(){ CATS = catsDe(TIENDA); if(filtro!=="todos" && !CATS[filtro]) filtro = "todos"; pintarFiltros(); pintarRetiroYContacto(); pintarPago(); actualizar(); }
+function pintarTodo(){ CATS = catsDe(TIENDA); if(filtro!=="todos" && !CATS[filtro]) filtro = "todos"; pintarFiltros(); pintarRetiroYContacto(); pintarEntrega(); pintarPago(); actualizar(); }
 
 // ===== Bloqueo del scroll de fondo (también en iPhone) =====
 let bloqueos = 0, scrollGuardado = 0;
@@ -1458,7 +1477,9 @@ function vistaPedidos(){
         </header>
         <div class="ped-datos">
           <a class="ped-wa" href="${waLink(p.whatsapp)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20l1.3-4A8 8 0 1 1 8 19z"/></svg>${esc(p.whatsapp)}</a>
-          ${p.retiro && p.retiro.dia ? `<span>🗓 Retira ${esc(p.retiro.dia)}${p.retiro.hora ? " · " + esc(p.retiro.hora) : ""}</span>` : ""}
+          ${p.entrega === "uber"
+            ? `<span class="ped-uber">🛵 Envío Uber${p.direccion ? ": " + esc(p.direccion) : ""}${p.retiro && p.retiro.dia ? " · " + esc(p.retiro.dia) + (p.retiro.hora ? " " + esc(p.retiro.hora) : "") : ""}</span>`
+            : p.retiro && p.retiro.dia ? `<span>🗓 Retira ${esc(p.retiro.dia)}${p.retiro.hora ? " · " + esc(p.retiro.hora) : ""}</span>` : ""}
           ${p.pago ? `<span>💳 ${esc(p.pago)}</span>` : ""}
         </div>
         <ul class="ped-items">${p.items.map(i => `<li><span><b>${kgFmt(i.g)}</b> ${esc(i.nombre)}${i.prep ? ` <i>— ${esc(i.prep)}</i>` : ""}${i.nota ? ` <em>“${esc(i.nota)}”</em>` : ""}</span><span>${fmt(i.subtotal)}</span></li>`).join("")}</ul>
@@ -1509,11 +1530,11 @@ function vistaVentas(){
 
 function descargarCSV(){
   const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
-  const filas = [["Fecha","Hora","Cliente","WhatsApp","Producto","Categoría","Preparación","Nota","Kilos","Precio por kg","Subtotal","Total del pedido","Pago","Retiro","Aclaraciones"]];
+  const filas = [["Fecha","Hora","Cliente","WhatsApp","Producto","Categoría","Preparación","Nota","Kilos","Precio por kg","Subtotal","Total del pedido","Pago","Entrega","Dirección","Día y horario","Aclaraciones"]];
   for(const p of [...HIST.lista].reverse()){
     const d = new Date(p.ts - HORA_AR), fecha = d.toISOString().slice(0, 10), hora = d.toISOString().slice(11, 16);
     for(const i of p.items) filas.push([fecha, hora, p.nombre, p.whatsapp, i.nombre, i.catNombre, i.prep, i.nota,
-      (i.g / 1000).toString().replace(".", ","), i.precioKg, i.subtotal, p.total, p.pago, [p.retiro?.dia, p.retiro?.hora].filter(Boolean).join(" "), p.obs]);
+      (i.g / 1000).toString().replace(".", ","), i.precioKg, i.subtotal, p.total, p.pago, p.entrega === "uber" ? "Envío Uber" : "Retiro en el local", p.direccion || "", [p.retiro?.dia, p.retiro?.hora].filter(Boolean).join(" "), p.obs]);
   }
   const csv = "﻿" + filas.map(f => f.map(q).join(";")).join("\r\n");
   const a = document.createElement("a");
