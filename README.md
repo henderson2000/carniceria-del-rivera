@@ -34,3 +34,5 @@ Abrí http://localhost:3000. Sin Redis ni Blob configurados, todo se guarda en l
 - `api/pedidos.js` – historial de pedidos por fechas para el panel (requiere sesión).
 - `api/login.js` – verifica usuario y contraseña en el servidor y da una sesión de 12 horas.
 - `api/foto.js` – sube fotos de productos a Vercel Blob.
+- `api/subir.js` – permiso para que el panel suba videos de la portada directo a Vercel Blob (hasta 40 MB).
+- `public/vendor/blob-client.js` – cliente de subida de Vercel Blob empaquetado para el navegador (`@vercel/blob/client`).

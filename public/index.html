@@ -507,6 +507,52 @@
   html,body,button,a,input,select,textarea,label,.switch{touch-action:manipulation}
   /* iPhone agranda la pantalla al tocar un campo con letra chica: con 16px no lo hace */
   @media(max-width:900px){ input,select,textarea{font-size:16px !important} }
+
+  /* Portada con diapositivas (imágenes o videos cargados desde el panel) */
+  .hero-slides{display:none}
+  .hero-card.con-slides{background:#120a09}
+  .hero-card.con-slides .hero-original{display:none}
+  .hero-card.con-slides .hero-slides{display:grid;flex:1}
+  .hslide{grid-area:1/1;position:relative;display:flex;align-items:center;min-height:520px;opacity:0;visibility:hidden;transition:opacity .7s ease,visibility .7s}
+  .hslide.on{opacity:1;visibility:visible}
+  .hslide-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .hslide-velo{position:absolute;inset:0}
+  .hslide .hero-txt{z-index:1;padding:60px 56px}
+  .hslide .hero-txt h1{white-space:pre-line}
+  .hslide .hero-txt p{white-space:pre-line}
+  .hero-dots{position:absolute;left:0;right:0;bottom:66px;display:none;justify-content:center;gap:8px;z-index:2}
+  .con-slides .hero-dots.varios{display:flex}
+  .hero-dots button{width:9px;height:9px;border-radius:999px;border:none;background:rgba(255,255,255,.45);padding:0;cursor:pointer;transition:width .3s,background .3s}
+  .hero-dots button.on{width:26px;background:#fff}
+  @media(max-width:600px){
+    .hslide{min-height:440px}
+    .hslide .hero-txt{padding:34px 20px 40px}
+    .hero-dots{bottom:52px}
+  }
+  @media(prefers-reduced-motion:reduce){ .hslide{transition:none} }
+
+  /* Panel: portada */
+  .sl-card{background:#fff;border:1px solid var(--linea);border-radius:16px;padding:12px;margin-bottom:12px}
+  .sl-card.apagada{opacity:.6}
+  .sl-prev{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;max-height:300px;width:100%;background:#120a09;color:var(--hueso);font-size:.55em}
+  .sl-prev .hslide{min-height:0;height:100%;opacity:1;visibility:visible}
+  .sl-prev .hero-txt{padding:14px 20px;max-width:75%}
+  .sl-prev .kicker{font-size:.55rem}
+  .sl-prev h1{font-family:var(--serif);font-weight:500;font-size:clamp(1rem,3.2vw,1.45rem);line-height:1.05;margin:6px 0;white-space:pre-line}
+  .sl-prev p{font-size:.72rem;color:#eadfcf;margin-bottom:8px;max-width:420px;white-space:pre-line}
+  .sl-prev .btn{padding:7px 12px;font-size:.75rem;pointer-events:none}
+  .sl-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0 4px}
+  .sl-top b{font-size:.88rem}
+  .sl-acc{display:flex;gap:6px;align-items:center}
+  .sl-acc button{width:32px;height:32px;border-radius:8px;border:1px solid var(--linea);background:#fff;cursor:pointer;color:var(--gris)}
+  .sl-acc button:disabled{opacity:.3;cursor:default}
+  .sl-rango{display:flex;align-items:center;gap:10px}
+  .sl-rango input{flex:1;accent-color:var(--vino)}
+  .sl-subiendo{background:#fff;border:1px dashed var(--vino);border-radius:14px;padding:14px;margin-bottom:12px;font-size:.88rem}
+  .sl-barra{height:8px;background:var(--crema);border-radius:999px;overflow:hidden;margin-top:8px}
+  .sl-barra i{display:block;height:100%;background:var(--vino);transition:width .2s}
+  .sl-agregar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0 6px}
+  .sl-agregar select{max-width:260px;margin:0}
 </style>
 </head>
 <body>
@@ -533,14 +579,16 @@
 
 <header class="hero" id="inicio">
   <div class="wrap">
-    <div class="hero-card">
-            <div class="hero-txt">
+    <div class="hero-card" id="heroCard">
+      <div class="hero-slides" id="heroSlides" aria-roledescription="carrusel" aria-label="Novedades"></div>
+      <div class="hero-txt hero-original">
         <div class="kicker">De nuestro mostrador a tu mesa</div>
         <h1>Buena carne.<br>Buenos <em>momentos.</em></h1>
         <p>Los cortes de siempre, con la calidad de Del Rivera. Elegí online y retiralo en el local, o pedí que te lo mandemos por Uber.</p>
         <a href="#cortes" class="btn">Elegí tus cortes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
         <div class="confianza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg> Frescura y confianza desde 2013</div>
       </div>
+      <div class="hero-dots" id="heroDots"></div>
       <div class="hero-pie"><span>El sabor de juntarnos.</span><a href="#local">Córdoba, Argentina ↗</a></div>
     </div>
 
@@ -680,11 +728,11 @@
     <div class="adm-top-in">
       <div class="adm-marca"><img src="logo.png" alt=""><div><small class="adm-kicker">Del Rivera</small><h1>Panel del local</h1></div></div>
       <div class="adm-top-acc">
-        <button class="btn-sec" onclick="volverTienda()">← <span class="txt-largo">Ver la </span>tienda</button>
+        <button class="btn-sec" onclick="volverTienda()">←&nbsp;<span class="txt-largo">Ver la&nbsp;</span>tienda</button>
         <button class="btn-sec" onclick="cerrarSesion()"><span class="txt-largo">Cerrar sesión</span><span class="txt-corto">Salir</span></button>
       </div>
     </div>
-    <div class="adm-tabs"><button class="adm-tab on" data-tab="productos">Productos y stock</button><button class="adm-tab" data-tab="pedidos">Pedidos</button><button class="adm-tab" data-tab="ventas">Más vendidos</button><button class="adm-tab" data-tab="categorias">Categorías</button><button class="adm-tab" data-tab="pagos">Pagos</button><button class="adm-tab" data-tab="local">Retiro y contacto</button></div>
+    <div class="adm-tabs"><button class="adm-tab on" data-tab="productos">Productos y stock</button><button class="adm-tab" data-tab="pedidos">Pedidos</button><button class="adm-tab" data-tab="ventas">Más vendidos</button><button class="adm-tab" data-tab="portada">Portada</button><button class="adm-tab" data-tab="categorias">Categorías</button><button class="adm-tab" data-tab="pagos">Pagos</button><button class="adm-tab" data-tab="local">Retiro y contacto</button></div>
   </header>
   <main class="adm-main" id="admCuerpo"></main>
   <div class="adm-pie">
@@ -694,6 +742,7 @@
     </div>
   </div>
   <input type="file" id="fotoInput" accept="image/png,image/jpeg,image/webp" hidden>
+  <input type="file" id="portadaInput" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,video/quicktime" hidden>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -774,6 +823,7 @@ const BASE = [
 ];
 const DEFAULT = {
   categorias: CATS_BASE,
+  portada: {slides: []},
   productos: BASE.map(([cat,nombre,desc,precio],n) => ({
     id:"p"+(n+1), cat, nombre, desc, precio, foto: FOTOS[nombre]||"",
     preps: PREP[nombre] ?? PREP_CAT[cat], stock:true })),
@@ -829,7 +879,12 @@ function sanear(d){
     id:String(p.id), cat: ids.has(p.cat) ? p.cat : categorias[0].id, nombre:String(p.nombre), desc:String(p.desc ?? ""),
     precio: Math.max(0, Number(p.precio) || 0), foto: typeof p.foto === "string" && (/^[a-f0-9]{12}$/.test(p.foto) || esUrlFoto(p.foto)) ? p.foto : "",
     preps: Array.isArray(p.preps) ? p.preps.map(String).filter(Boolean) : [], stock: p.stock !== false }));
-  return {categorias, productos, ajustes:a};
+  const slides = (d.portada && Array.isArray(d.portada.slides) ? d.portada.slides : []).slice(0, 8)
+    .filter(x => x && x.id && typeof x.url === "string" && (esUrlFoto(x.url) || /^products\/[a-f0-9]{12}\.webp$/.test(x.url)))
+    .map(x => ({id:String(x.id), tipo: x.tipo === "video" ? "video" : "imagen", url:x.url, kicker:String(x.kicker ?? ""), titulo:String(x.titulo ?? ""),
+      texto:String(x.texto ?? ""), boton:String(x.boton ?? ""), accion: ["cortes","whatsapp","ninguno"].includes(x.accion) ? x.accion : "cortes",
+      oscuro: Math.min(85, Math.max(0, Number(x.oscuro) || 0)), activo: x.activo !== false}));
+  return {categorias, productos, ajustes:a, portada:{slides}};
 }
 
 // ===== Catálogo =====
@@ -1075,7 +1130,64 @@ function pintarRetiroYContacto(){
 ["nombre","wa","dir","hora","obs"].forEach(id => $(id).addEventListener("input", actualizar));
 $("dia").addEventListener("change", () => { pintarHoras(); actualizar(); });
 
-function pintarTodo(){ CATS = catsDe(TIENDA); if(filtro!=="todos" && !CATS[filtro]) filtro = "todos"; pintarFiltros(); pintarRetiroYContacto(); pintarEntrega(); pintarPago(); actualizar(); }
+function pintarTodo(){ CATS = catsDe(TIENDA); if(filtro!=="todos" && !CATS[filtro]) filtro = "todos"; pintarFiltros(); pintarRetiroYContacto(); pintarEntrega(); pintarPago(); pintarPortada(); actualizar(); }
+
+
+// ===== Portada (banner) =====
+function htmlSlide(sl, enPanel){
+  const media = sl.tipo === "video"
+    ? `<video class="hslide-media" src="${esc(sl.url)}" muted loop playsinline ${enPanel ? "" : 'preload="metadata"'}></video>`
+    : `<img class="hslide-media" src="${esc(sl.url)}" alt="" ${enPanel ? "" : 'loading="lazy"'}>`;
+  const a = sl.oscuro / 100;
+  const velo = `background:linear-gradient(90deg,rgba(18,10,9,${Math.min(.95, a + .15)}) 0%,rgba(18,10,9,${a}) 55%,rgba(18,10,9,${a * .4}) 100%)`;
+  const wa = `https://wa.me/${TIENDA.ajustes.whatsapp}?text=${encodeURIComponent("¡Hola Del Rivera! Vi esto en la página: " + (sl.titulo || sl.kicker || "la promo"))}`;
+  const boton = sl.accion === "ninguno" || !sl.boton ? "" : sl.accion === "whatsapp"
+    ? `<a class="btn" href="${wa}" target="_blank" rel="noopener">${esc(sl.boton)} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>`
+    : `<a class="btn" href="#cortes">${esc(sl.boton)} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>`;
+  const hayTexto = sl.kicker || sl.titulo || sl.texto || boton;
+  return `${media}<div class="hslide-velo" style="${hayTexto ? velo : ""}"></div>
+    ${hayTexto ? `<div class="hero-txt">${sl.kicker ? `<div class="kicker">${esc(sl.kicker)}</div>` : ""}${sl.titulo ? `<h1>${esc(sl.titulo)}</h1>` : ""}${sl.texto ? `<p>${esc(sl.texto)}</p>` : ""}${boton}</div>` : ""}`;
+}
+let slideAct = 0, slideTimer = null, firmaPortada = "";
+function pintarPortada(){
+  const S = (TIENDA.portada?.slides || []).filter(x => x.activo);
+  const firma = JSON.stringify(S) + TIENDA.ajustes.whatsapp;
+  if(firma === firmaPortada) return;          // nada cambió: no reiniciar el carrusel ni los videos
+  firmaPortada = firma;
+  const card = $("heroCard"), cont = $("heroSlides"), dots = $("heroDots");
+  clearInterval(slideTimer);
+  card.classList.toggle("con-slides", S.length > 0);
+  if(!S.length){ cont.innerHTML = ""; dots.innerHTML = ""; return; }
+  cont.innerHTML = S.map((sl, n) => `<div class="hslide" data-n="${n}" aria-roledescription="diapositiva" aria-label="${n+1} de ${S.length}">${htmlSlide(sl)}</div>`).join("");
+  dots.innerHTML = S.map((_, n) => `<button data-n="${n}" aria-label="Ver novedad ${n+1}"></button>`).join("");
+  dots.classList.toggle("varios", S.length > 1);
+  slideAct = 0; mostrarSlide(0); programarSlides();
+}
+function mostrarSlide(n){
+  const L = [...$("heroSlides").children]; if(!L.length) return;
+  slideAct = (n + L.length) % L.length;
+  L.forEach((el, i) => {
+    el.classList.toggle("on", i === slideAct);
+    const v = el.querySelector("video");
+    if(v){ if(i === slideAct){ v.preload = "auto"; v.play().catch(() => {}); } else v.pause(); }
+    const img = el.querySelector("img"); if(img && i <= slideAct + 1) img.loading = "eager";
+  });
+  [...$("heroDots").children].forEach((d, i) => d.classList.toggle("on", i === slideAct));
+}
+function programarSlides(){
+  clearInterval(slideTimer);
+  const n = $("heroSlides").children.length;
+  if(n > 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches) slideTimer = setInterval(() => { if(!document.hidden) mostrarSlide(slideAct + 1); }, 7000);
+}
+$("heroDots").addEventListener("click", e => { const b = e.target.closest("[data-n]"); if(b){ mostrarSlide(+b.dataset.n); programarSlides(); } });
+(() => {  // deslizar con el dedo
+  let x0 = null;
+  $("heroSlides").addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, {passive:true});
+  $("heroSlides").addEventListener("touchend", e => {
+    if(x0 === null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if(Math.abs(dx) > 45 && $("heroSlides").children.length > 1){ mostrarSlide(slideAct + (dx < 0 ? 1 : -1)); programarSlides(); }
+  }, {passive:true});
+})();
 
 // ===== Bloqueo del scroll de fondo (también en iPhone) =====
 let bloqueos = 0, scrollGuardado = 0;
@@ -1218,6 +1330,8 @@ function pintarAdmin(){
         if(!lista.length) return "";
         return `<h4 class="adm-cat">${esc(v)}</h4>` + lista.map(p => filaProducto(p)).join("");
       }).join("") || `<p class="adm-ayuda">No hay productos que coincidan.</p>`}`;
+  } else if(tab === "portada"){
+    pintarPortadaAdmin(c);
   } else if(tab === "categorias"){
     c.innerHTML = `
       <p class="adm-ayuda">Estas son las categorías que aparecen como filtros en la tienda. Podés renombrarlas, cambiarles el orden, borrarlas o crear nuevas.</p>
@@ -1609,7 +1723,132 @@ $("admCuerpo").addEventListener("input", e => {
   const nb = $("pedBuscar"); if(nb){ nb.focus(); nb.setSelectionRange(pos, pos); }
 });
 
+// ===== Panel: portada =====
+let SUBIDA = null;   // {nombre, pct, para}
+const nuevoSlide = (url, tipo) => ({id:"s" + Date.now().toString(36), tipo, url, kicker:"", titulo:"", texto:"", boton:"Elegí tus cortes", accion:"cortes", oscuro:45, activo:true});
+function pintarPortadaAdmin(c){
+  const L = BORRADOR.portada.slides;
+  const opFotos = Object.entries(FOTOS).map(([n, f]) => `<option value="products/${f}.webp">${esc(n)}</option>`).join("");
+  c.innerHTML = `
+    <p class="adm-ayuda">Es el banner grande del principio de la página. Podés cargar una o varias imágenes o videos con tu texto (una promo, una novedad). Si hay más de una, van pasando solas cada 7 segundos. ${L.some(x => x.activo) ? "" : "<b>Ahora se muestra la portada original</b>, porque no hay ninguna activa."}</p>
+    <div class="sl-agregar">
+      <button class="adm-btn" data-acc="slSubir" ${SUBIDA ? "disabled" : ""} style="padding:11px 16px">+ Subir imagen o video</button>
+      <select class="adm-in" data-slfoto><option value="">o usar una foto de tus productos…</option>${opFotos}</select>
+    </div>
+    <p class="adm-ayuda" style="margin-top:0">Videos: MP4 de hasta 40 MB. Conviene que sean cortos (10 a 20 segundos) y livianos: cada visita los descarga.</p>
+    ${SUBIDA ? `<div class="sl-subiendo">Subiendo <b>${esc(SUBIDA.nombre)}</b>… ${SUBIDA.pct}%<div class="sl-barra"><i style="width:${SUBIDA.pct}%"></i></div></div>` : ""}
+    ${L.map((sl, n) => `<div class="sl-card ${sl.activo ? "" : "apagada"}" data-slid="${esc(sl.id)}">
+      <div class="sl-prev"><div class="hslide on">${htmlSlide(sl, true)}</div></div>
+      <div class="sl-top">
+        <b>${n + 1}. ${sl.tipo === "video" ? "Video" : "Imagen"}${sl.activo ? "" : " · oculta"}</b>
+        <div class="sl-acc">
+          <button data-acc="slSube" ${n === 0 ? "disabled" : ""} aria-label="Subir">▲</button>
+          <button data-acc="slBaja" ${n === L.length - 1 ? "disabled" : ""} aria-label="Bajar">▼</button>
+          <label class="switch" title="${sl.activo ? "Se muestra" : "Oculta"}"><input type="checkbox" data-sl="activo" ${sl.activo ? "checked" : ""}><span></span></label>
+        </div>
+      </div>
+      <label class="adm-lab">Etiqueta chica (arriba del título)</label><input class="adm-in" data-sl="kicker" value="${esc(sl.kicker)}" placeholder="Ej: PROMO DE LA SEMANA">
+      <label class="adm-lab">Título</label><textarea class="adm-in" rows="2" data-sl="titulo" placeholder="Ej: 2 kg de asado + 1 kg de vacío">${esc(sl.titulo)}</textarea>
+      <label class="adm-lab">Texto</label><textarea class="adm-in" rows="2" data-sl="texto" placeholder="Ej: Solo este fin de semana, hasta agotar stock.">${esc(sl.texto)}</textarea>
+      <div class="adm-dos">
+        <div><label class="adm-lab">Texto del botón <small>(vacío = sin botón)</small></label><input class="adm-in" data-sl="boton" value="${esc(sl.boton)}"></div>
+        <div><label class="adm-lab">El botón lleva a</label><select class="adm-in" data-sl="accion">
+          <option value="cortes" ${sl.accion === "cortes" ? "selected" : ""}>Los cortes de la tienda</option>
+          <option value="whatsapp" ${sl.accion === "whatsapp" ? "selected" : ""}>Un mensaje de WhatsApp</option>
+          <option value="ninguno" ${sl.accion === "ninguno" ? "selected" : ""}>Sin botón</option></select></div>
+      </div>
+      <label class="adm-lab">Oscurecer la imagen (para que se lea el texto)</label>
+      <div class="sl-rango"><input type="range" min="0" max="85" step="5" data-sl="oscuro" value="${sl.oscuro}"><span>${sl.oscuro}%</span></div>
+      <div class="adm-nuevo-acc">
+        <button class="btn-sec" data-acc="slCambiar" ${SUBIDA ? "disabled" : ""}>Cambiar imagen o video</button>
+        <button class="adm-borrar" data-acc="slBorrar" style="margin-top:0">Eliminar</button>
+      </div>
+    </div>`).join("")}`;
+  c.querySelectorAll(".sl-prev video").forEach(v => { v.muted = true; v.play().catch(() => {}); });
+}
+const slideDe = el => BORRADOR.portada.slides.find(x => x.id === el.closest("[data-slid]")?.dataset.slid);
+function refrescarPrevia(card, sl){
+  const prev = card.querySelector(".sl-prev .hslide"); const v = prev.querySelector("video");
+  const t = v ? v.currentTime : 0; prev.innerHTML = htmlSlide(sl, true);
+  const nv = prev.querySelector("video"); if(nv){ nv.muted = true; nv.currentTime = t; nv.play().catch(() => {}); }
+}
+$("admCuerpo").addEventListener("input", e => {
+  const t = e.target;
+  if(t.dataset.slfoto !== undefined){
+    if(!t.value) return;
+    BORRADOR.portada.slides.push(nuevoSlide(t.value, "imagen")); marcar(); pintarAdmin(); irAlUltimoSlide(); return;
+  }
+  if(!t.dataset.sl) return;
+  const sl = slideDe(t); if(!sl) return;
+  const k = t.dataset.sl;
+  if(k === "activo"){ sl.activo = t.checked; marcar(); pintarAdmin(); return; }
+  if(k === "oscuro"){ sl.oscuro = +t.value; t.nextElementSibling.textContent = t.value + "%"; }
+  else sl[k] = t.value;
+  marcar(); refrescarPrevia(t.closest("[data-slid]"), sl);
+});
+function irAlUltimoSlide(){ const L = $("admCuerpo").querySelectorAll(".sl-card"); if(L.length) L[L.length - 1].scrollIntoView({block:"start"}); }
+let slideParaCambiar = null;
+$("admCuerpo").addEventListener("click", e => {
+  const b = e.target.closest("[data-acc]"); if(!b || !b.dataset.acc.startsWith("sl")) return;
+  const L = BORRADOR.portada.slides, sl = slideDe(b), i = sl ? L.indexOf(sl) : -1;
+  if(b.dataset.acc === "slSubir" || b.dataset.acc === "slCambiar"){
+    slideParaCambiar = b.dataset.acc === "slCambiar" && sl ? sl.id : null;
+    const inp = $("portadaInput"); inp.value = ""; inp.click();
+  }
+  else if(b.dataset.acc === "slSube" || b.dataset.acc === "slBaja"){
+    const j = b.dataset.acc === "slSube" ? i - 1 : i + 1; if(i < 0 || j < 0 || j >= L.length) return;
+    [L[i], L[j]] = [L[j], L[i]]; marcar(); pintarAdmin();
+  }
+  else if(b.dataset.acc === "slBorrar"){
+    if(b.dataset.seguro !== "1"){ b.dataset.seguro = "1"; b.textContent = "Tocá de nuevo para eliminar"; return; }
+    BORRADOR.portada.slides = L.filter(x => x !== sl); marcar(); pintarAdmin();
+  }
+});
+async function subirGrande(file, onPct){
+  const info = await fetch("/api/subir").then(r => r.json()).catch(() => ({modo:"local"}));
+  if(info.modo === "blob"){
+    const {upload} = await import("/vendor/blob-client.js");
+    const nombre = "portada/" + (file.name || "video").toLowerCase().normalize("NFD").replace(/[^\w.\-]+/g, "-").slice(-60);
+    const r = await upload(nombre, file, {access:"public", handleUploadUrl:"/api/subir", clientPayload: token,
+      multipart: file.size > 15 * 1024 * 1024, contentType: file.type, onUploadProgress: ev => onPct(Math.round(ev.percentage))});
+    return r.url;
+  }
+  const r = await fetch("/api/subir", {method:"POST", headers:{...authHeaders(), "Content-Type": file.type}, body: file});
+  if(r.status === 401) throw {msg:"Tu sesión venció: ingresá de nuevo", vencida:true};
+  const j = await r.json().catch(() => ({})); if(!r.ok) throw {msg:j.error}; onPct(100); return j.url;
+}
+$("portadaInput").addEventListener("change", async e => {
+  const file = e.target.files && e.target.files[0]; if(!file) return;
+  const esVideo = file.type.startsWith("video/");
+  if(esVideo && !["video/mp4","video/webm","video/quicktime"].includes(file.type)){ toast("Ese video no sirve: usá MP4"); return; }
+  if(!esVideo && !["image/jpeg","image/png","image/webp"].includes(file.type)){ toast("Usá una imagen JPG, PNG o WEBP, o un video MP4"); return; }
+  if(esVideo && file.size > 40 * 1024 * 1024){ toast(`El video pesa ${Math.round(file.size/1048576)} MB: el máximo es 40 MB`); return; }
+  SUBIDA = {nombre: file.name, pct: 0}; if(tab === "portada") pintarAdmin();
+  const pct = n => { if(!SUBIDA) return; SUBIDA.pct = n; const i = $("admCuerpo").querySelector(".sl-barra i"); if(i){ i.style.width = n + "%"; i.parentElement.previousSibling.textContent = ` ${n}%`; } };
+  try{
+    let url;
+    if(esVideo) url = await subirGrande(file, pct);
+    else {
+      const blob = await achicar(file, 1920); pct(50);
+      const r = await fetch("/api/foto", {method:"POST", headers:{...authHeaders(), "Content-Type": blob.type}, body: blob});
+      if(r.status === 401) throw {vencida:true};
+      const j = await r.json().catch(() => ({})); if(!r.ok) throw {msg:j.error}; url = j.url; pct(100);
+    }
+    const tipo = esVideo ? "video" : "imagen", existente = slideParaCambiar && BORRADOR.portada.slides.find(x => x.id === slideParaCambiar);
+    if(existente){ existente.url = url; existente.tipo = tipo; }
+    else BORRADOR.portada.slides.push(nuevoSlide(url, tipo));
+    marcar(); SUBIDA = null; pintarAdmin(); if(!existente) irAlUltimoSlide();
+    toast(esVideo ? "Video subido. Completá el texto y guardá los cambios" : "Imagen subida. Completá el texto y guardá los cambios");
+  }catch(err){
+    SUBIDA = null; pintarAdmin();
+    if(err && err.vencida){ sesionVencida(); return; }
+    toast((err && (err.msg || err.message)) || "No se pudo subir. Probá de nuevo");
+  }
+  slideParaCambiar = null;
+});
+
 async function guardarAdmin(){
+  if(SUBIDA){ toast("Esperá a que termine de subir el archivo"); return; }
   if(NUEVO){ tab = "productos"; pintarAdmin(); toast("Tocá “Agregar a la lista” en el producto nuevo (o cancelalo) antes de guardar"); const c = $("admCuerpo").querySelector(".adm-nuevo"); if(c) c.scrollIntoView({block:"start"}); return; }
   const d = sanear(BORRADOR);
   if(!d){ toast("Revisá los datos"); return; }

@@ -112,8 +112,9 @@ export async function permitir(ip, max = 10){
 }
 
 // Fotos
+export const hayBlob = !!TOKEN_BLOB;
 export async function guardarFoto(buffer, tipo){
-  const ext = {"image/webp":"webp","image/jpeg":"jpg","image/png":"png"}[tipo];
+  const ext = {"image/webp":"webp","image/jpeg":"jpg","image/png":"png","video/mp4":"mp4","video/webm":"webm","video/quicktime":"mov"}[tipo];
   const nombre = `${Date.now()}-${crypto.randomBytes(5).toString("hex")}.${ext}`;
   if(!TOKEN_BLOB){
     await fs.mkdir(path.join(LOCAL_DIR, "fotos"), {recursive:true});
@@ -145,8 +146,9 @@ export function crearToken(){
   const firma = crypto.createHmac("sha256", SECRETO).update("admin." + vence).digest("hex");
   return `${vence}.${firma}`;
 }
-export function tokenValido(request){
-  const m = (request.headers.get("authorization") || "").match(/^Bearer (\d+)\.([a-f0-9]{64})$/);
+export function tokenValido(request){ return tokenTextoValido((request.headers.get("authorization") || "").replace(/^Bearer /, "")); }
+export function tokenTextoValido(t){
+  const m = String(t || "").match(/^(\d+)\.([a-f0-9]{64})$/);
   if(!m || +m[1] < Date.now()) return false;
   const esperado = Buffer.from(crypto.createHmac("sha256", SECRETO).update("admin." + m[1]).digest("hex"));
   const dado = Buffer.from(m[2]);
@@ -155,8 +157,17 @@ export function tokenValido(request){
 
 // ---------- Validación de lo que manda el panel ----------
 const txt = (v, max) => String(v ?? "").slice(0, max);
-const esFoto = f => typeof f === "string" && (/^[a-f0-9]{12}$/.test(f)
-  || /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/[\w\-./%]+$/i.test(f) || /^\/_local\/[\w\-.]+$/.test(f));
+const esArchivo = f => typeof f === "string" && (/^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/[\w\-./%]+$/i.test(f) || /^\/_local\/[\w\-.]+$/.test(f));
+const esFoto = f => typeof f === "string" && (/^[a-f0-9]{12}$/.test(f) || esArchivo(f));
+// Portada: diapositivas con imagen o video, texto y botón
+function validarPortada(p){
+  const slides = Array.isArray(p?.slides) ? p.slides : [];
+  return {slides: slides.slice(0, 8).filter(x => x && /^[\w-]{1,40}$/.test(x.id) && (esArchivo(x.url) || /^products\/[a-f0-9]{12}\.webp$/.test(x.url))).map(x => ({
+    id: x.id, tipo: x.tipo === "video" ? "video" : "imagen", url: x.url,
+    kicker: txt(x.kicker, 60), titulo: txt(x.titulo, 120), texto: txt(x.texto, 280), boton: txt(x.boton, 40),
+    accion: ["cortes","whatsapp","ninguno"].includes(x.accion) ? x.accion : "cortes",
+    oscuro: Math.min(85, Math.max(0, Math.round(Number(x.oscuro) || 0))), activo: x.activo !== false }))};
+}
 export function validar(d){
   if(!d || typeof d !== "object" || !Array.isArray(d.productos) || !Array.isArray(d.categorias)) return null;
   const categorias = d.categorias.slice(0, 50).filter(c => c && /^[a-z0-9-]{1,40}$/.test(c.id) && txt(c.nombre, 60).trim())
@@ -174,7 +185,7 @@ export function validar(d){
     horarios: Array.isArray(a.horarios) ? a.horarios.slice(0, 30).map(h => txt(h, 10).trim()).filter(Boolean) : [],
     alias: txt(a.alias, 40), cbu: txt(a.cbu, 30), titular: txt(a.titular, 80)
   };
-  return {categorias, productos, ajustes};
+  return {categorias, productos, ajustes, portada: validarPortada(d.portada)};
 }
 
 export const json = (obj, status = 200, cache = "no-store") => new Response(JSON.stringify(obj), {status, headers:{"Content-Type":"application/json; charset=utf-8", "Cache-Control":cache}});
