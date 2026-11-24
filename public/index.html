@@ -191,6 +191,9 @@
   .linea .n i{font-style:normal;font-size:.82rem;color:var(--vino)}
   .mini{display:flex;align-items:center;gap:4px}
   .mini button{width:30px;height:30px;border-radius:8px;border:1px solid var(--linea);background:#fff;cursor:pointer;font-weight:700}
+  .mini .quitar{margin-left:6px;color:#b3201f;border-color:#efd3d3;display:grid;place-items:center}
+  .mini .quitar:hover{background:#fbeaea;border-color:#b3201f}
+  .mini .quitar svg{width:16px;height:16px}
   .mini span{min-width:58px;text-align:center;font-weight:600;font-size:.9rem}
   .retiro{margin-top:22px}
   .retiro h4{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--vino);margin-bottom:12px}
@@ -883,6 +886,8 @@ function confirmar(){
 
 // ===== Carrito =====
 $("lineas").addEventListener("click", e => {
+  const q = e.target.closest("[data-quitar]");
+  if(q){ const it = carrito[q.dataset.quitar]; if(it){ const n = prod(it.id); delete carrito[q.dataset.quitar]; actualizar(); toast(`Quitaste ${n ? n.nombre : "el producto"} del pedido`); } return; }
   const b = e.target.closest("[data-k]"); if(!b) return;
   const it = carrito[b.dataset.k]; if(!it) return;
   it.g += +b.dataset.d;
@@ -912,7 +917,7 @@ function actualizar(){
     const det = [it.prep, it.nota && `“${it.nota}”`].filter(Boolean).join(" · ");
     return `<div class="linea">
       <div class="n"><b>${esc(p.nombre)}</b>${det?`<i>${esc(det)}</i>`:""}<small>${fmt(sub(it))}</small></div>
-      <div class="mini"><button data-k="${esc(k)}" data-d="-250" aria-label="Menos">−</button><span>${pesoTxt(it.g)}</span><button data-k="${esc(k)}" data-d="250" aria-label="Más">+</button></div>
+      <div class="mini"><button data-k="${esc(k)}" data-d="-250" aria-label="Menos">−</button><span>${pesoTxt(it.g)}</span><button data-k="${esc(k)}" data-d="250" aria-label="Más">+</button><button class="quitar" data-quitar="${esc(k)}" aria-label="Quitar ${esc(p.nombre)} del pedido" title="Quitar del pedido"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></div>
     </div>`;}).join("") :
     `<div class="vacio"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M2 3h3l2.6 12.4a1 1 0 0 0 1 .8h9.7a1 1 0 0 0 1-.8L21 7H6"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg><p>Todavía no elegiste ningún corte.</p></div>`;
   pintarGrilla();
