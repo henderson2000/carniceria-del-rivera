@@ -486,6 +486,22 @@
     .adm-barra{flex-wrap:wrap}.adm-barra .adm-btn{padding:10px 14px}
     .ped-items li{font-size:.82rem}
   }
+
+  /* Producto nuevo */
+  .adm-nuevo{border:2px dashed var(--vino);border-radius:16px;padding:4px 10px 10px;background:#fbf3f1;margin:12px 0 4px}
+  .adm-nuevo .adm-cat{margin-top:10px}
+  .adm-nuevo .adm-prod{margin-bottom:0}
+  .adm-nuevo-acc{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .adm-nuevo-acc .adm-btn{padding:11px 16px}
+  .adm-nuevo-acc .btn-sec{padding:11px 16px;background:#fff}
+  .adm-nom i{color:var(--gris);font-weight:500}
+  .adm-prod.recien{animation:destello 2.2s ease}
+  @keyframes destello{0%,45%{box-shadow:0 0 0 3px var(--vino);background:#fbf3f1}100%{box-shadow:0 0 0 0 transparent}}
+
+  /* Celulares y tablets: sin zoom con doble toque (el zoom con dos dedos sigue andando) */
+  html,body,button,a,input,select,textarea,label,.switch{touch-action:manipulation}
+  /* iPhone agranda la pantalla al tocar un campo con letra chica: con 16px no lo hace */
+  @media(max-width:900px){ input,select,textarea{font-size:16px !important} }
 </style>
 </head>
 <body>
@@ -1088,13 +1104,15 @@ $("loginForm").addEventListener("submit", async e => {
   await cargarTienda(); mostrarAdmin();
 });
 
+let NUEVO = null;
+const prodEd = id => (NUEVO && NUEVO.id === id) ? NUEVO : BORRADOR.productos.find(x => x.id === id);
 let BORRADOR = null, adminAbierto = false, hayCambios = false, tab = "productos", abiertoId = null, busqueda = "";
 let scrollTienda = 0;
 function mostrarAdmin(){
   if(adminAbierto) return;
   cerrarPanel(); cerrarModal();
   scrollTienda = window.scrollY;
-  BORRADOR = clon(TIENDA); hayCambios = false; adminAbierto = true; HIST.para = "";
+  BORRADOR = clon(TIENDA); hayCambios = false; adminAbierto = true; HIST.para = ""; NUEVO = null;
   $("admin").hidden = false; document.body.classList.add("modo-admin");
   document.title = "Panel del local · Del Rivera";
   scrollInstant(0); pintarAdmin();
@@ -1144,6 +1162,7 @@ function pintarAdmin(){
         <button class="adm-btn" data-acc="nuevo">+ Agregar producto</button>
       </div>
       <p class="adm-ayuda">${B.productos.length} productos · ${sin ? `<b>${sin} sin stock</b>` : "todos con stock"}. Tocá el interruptor para bloquear un corte cuando se te termina.</p>
+      ${NUEVO ? `<div class="adm-nuevo"><h4 class="adm-cat">Nuevo producto</h4>${filaProducto(NUEVO, true)}</div>` : ""}
       ${Object.entries(catsDe(B)).map(([k,v]) => {
         const lista = B.productos.filter(p => p.cat===k && (!q || norm(p.nombre).includes(q)));
         if(!lista.length) return "";
@@ -1181,18 +1200,18 @@ function pintarAdmin(){
   }
 }
 const campo = (lab,k,v) => `<label class="adm-lab">${lab}</label><input class="adm-in" data-aj="${k}" value="${esc(v)}">`;
-function filaProducto(p){
-  const abierto = abiertoId === p.id, url = fotoUrl(p);
+function filaProducto(p, esNuevo = false){
+  const abierto = esNuevo || abiertoId === p.id, url = fotoUrl(p);
   return `<div class="adm-prod ${p.stock?'':'agotado'}" data-pid="${esc(p.id)}">
     <div class="adm-fila">
       ${url ? `<img src="${url}" alt="">` : `<div class="adm-sinfoto"></div>`}
-      <div class="adm-nom"><b>${esc(p.nombre)}</b><span>${p.stock ? "Con stock" : "Sin stock"}</span></div>
+      <div class="adm-nom"><b>${esc(p.nombre) || "<i>Sin nombre</i>"}</b><span>${p.stock ? "Con stock" : "Sin stock"}</span></div>
       <label class="adm-precio">$<input type="number" min="0" step="100" data-campo="precio" value="${p.precio}"></label>
       <label class="switch" title="${p.stock?'Con stock':'Sin stock'}"><input type="checkbox" data-campo="stock" ${p.stock?'checked':''}><span></span></label>
-      <button class="adm-mas" data-acc="editar" aria-label="Editar">${abierto ? "▴" : "✎"}</button>
+      ${esNuevo ? "" : `<button class="adm-mas" data-acc="editar" aria-label="Editar">${abierto ? "▴" : "✎"}</button>`}
     </div>
     ${abierto ? `<div class="adm-detalle">
-      <label class="adm-lab">Nombre</label><input class="adm-in" data-campo="nombre" value="${esc(p.nombre)}">
+      <label class="adm-lab">Nombre</label><input class="adm-in" data-campo="nombre" value="${esc(p.nombre)}" placeholder="Ej: Chorizo puro cerdo">
       <label class="adm-lab">Descripción</label><textarea class="adm-in" rows="2" data-campo="desc">${esc(p.desc)}</textarea>
       <div class="adm-dos">
         <div style="grid-column:1/-1"><label class="adm-lab">Categoría</label><select class="adm-in" data-campo="cat">${Object.entries(catsDe(BORRADOR)).map(([k,v])=>`<option value="${k}" ${k===p.cat?'selected':''}>${esc(v)}</option>`).join("")}</select></div>
@@ -1208,9 +1227,14 @@ function filaProducto(p){
       </div>
       <label class="adm-lab">Opciones de “¿Cómo lo preparamos?” <small>(una por línea; vacío = sin opciones)</small></label>
       <textarea class="adm-in" rows="3" data-campo="preps">${esc(p.preps.join("\n"))}</textarea>
-      <button class="adm-borrar" data-acc="borrar">Eliminar producto</button>
+      ${esNuevo ? `<div class="adm-nuevo-acc"><button class="adm-btn" data-acc="agregarNuevo">Agregar a la lista</button><button class="btn-sec" data-acc="cancelarNuevo">Cancelar</button></div>`
+        : `<button class="adm-borrar" data-acc="borrar">Eliminar producto</button>`}
     </div>` : ""}
   </div>`;
+}
+function resaltar(id){
+  const el = $("admCuerpo").querySelector(`[data-pid="${CSS.escape(id)}"]`); if(!el) return;
+  el.scrollIntoView({block:"center"}); el.classList.remove("recien"); void el.offsetWidth; el.classList.add("recien");
 }
 // Edición (delegada)
 $("admCuerpo").addEventListener("input", e => {
@@ -1218,12 +1242,16 @@ $("admCuerpo").addEventListener("input", e => {
   if(t.id === "admBuscar"){ busqueda = t.value; const pos = t.selectionStart; pintarAdmin(); const nb = $("admBuscar"); nb.focus(); nb.setSelectionRange(pos,pos); return; }
   const fila = t.closest("[data-pid]");
   if(fila && t.dataset.campo){
-    const p = BORRADOR.productos.find(x => x.id === fila.dataset.pid); if(!p) return;
-    const k = t.dataset.campo;
+    const p = prodEd(fila.dataset.pid); if(!p) return;
+    const k = t.dataset.campo, esNuevo = p === NUEVO;
     if(k==="precio") p.precio = Math.max(0, Number(t.value) || 0);
     else if(k==="stock"){ p.stock = t.checked; marcar(); pintarAdmin(); return; }
     else if(k==="preps") p.preps = t.value.split("\n").map(s=>s.trim()).filter(Boolean);
-    else if(k==="cat" || k==="foto"){ p[k] = t.value; marcar(); pintarAdmin(); return; }
+    else if(k==="cat" || k==="foto"){
+      p[k] = t.value; marcar(); pintarAdmin();
+      if(k==="cat" && !esNuevo) resaltar(p.id);   // un producto existente se mueve a su nueva categoría: lo seguimos
+      return;
+    }
     else p[k] = t.value;
     if(k==="nombre") fila.querySelector(".adm-nom b").textContent = t.value;
     marcar(); return;
@@ -1249,10 +1277,25 @@ $("admCuerpo").addEventListener("click", e => {
   const fila = b.closest("[data-pid]"), id = fila && fila.dataset.pid;
   if(b.dataset.acc==="editar"){ abiertoId = abiertoId===id ? null : id; pintarAdmin(); }
   else if(b.dataset.acc==="nuevo"){
-    const nuevo = {id:"n"+Date.now().toString(36), cat: BORRADOR.categorias[0].id, nombre:"Nuevo producto", desc:"", precio:0, foto:"", preps:[], stock:false};
-    BORRADOR.productos.unshift(nuevo); abiertoId = nuevo.id; busqueda = ""; marcar(); pintarAdmin();
-    toast("Producto creado sin stock: completalo y activalo");
+    if(!NUEVO){
+      NUEVO = {id:"n"+Date.now().toString(36), cat: BORRADOR.categorias[0].id, nombre:"", desc:"", precio:0, foto:"", preps:[], stock:true};
+      busqueda = ""; marcar(); pintarAdmin();
+    }
+    const card = $("admCuerpo").querySelector(".adm-nuevo");
+    if(card){ card.scrollIntoView({block:"start"}); const n = card.querySelector('[data-campo="nombre"]'); if(n) n.focus({preventScroll:true}); }
   }
+  else if(b.dataset.acc==="agregarNuevo"){
+    if(!NUEVO) return;
+    NUEVO.nombre = NUEVO.nombre.trim();
+    if(!NUEVO.nombre){ toast("Ponele un nombre al producto"); $("admCuerpo").querySelector('.adm-nuevo [data-campo="nombre"]').focus(); return; }
+    if(NUEVO.stock && !NUEVO.precio){ toast("Ponele precio, o apagá el interruptor para cargarlo sin stock"); $("admCuerpo").querySelector('.adm-nuevo [data-campo="precio"]').focus(); return; }
+    const L = BORRADOR.productos, ult = L.map(x => x.cat).lastIndexOf(NUEVO.cat);
+    L.splice(ult === -1 ? L.length : ult + 1, 0, NUEVO);       // queda al final de su categoría
+    const id = NUEVO.id, cat = catsDe(BORRADOR)[NUEVO.cat];
+    NUEVO = null; abiertoId = null; marcar(); pintarAdmin(); resaltar(id);
+    toast(`Agregado en “${cat}”. Acordate de guardar los cambios`);
+  }
+  else if(b.dataset.acc==="cancelarNuevo"){ NUEVO = null; pintarAdmin(); }
   else if(b.dataset.acc==="nuevaCat"){
     const nom = $("nuevaCat").value.trim(); if(!nom){ toast("Escribí el nombre de la categoría"); $("nuevaCat").focus(); return; }
     let base = norm(nom).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,30) || "cat", cid = base, k = 2;
@@ -1313,7 +1356,7 @@ $("fotoInput").addEventListener("change", async e => {
     if(r.status === 401){ subiendo = null; sesionVencida(); return; }
     const j = await r.json().catch(() => ({}));
     if(!r.ok) throw {msg: j.error};
-    const p = BORRADOR.productos.find(x => x.id === id);
+    const p = prodEd(id);
     if(p){ p.foto = j.url; marcar(); }
     toast("Foto subida. Acordate de guardar los cambios");
   }catch(err){
@@ -1515,6 +1558,7 @@ $("admCuerpo").addEventListener("input", e => {
 });
 
 async function guardarAdmin(){
+  if(NUEVO){ tab = "productos"; pintarAdmin(); toast("Tocá “Agregar a la lista” en el producto nuevo (o cancelalo) antes de guardar"); const c = $("admCuerpo").querySelector(".adm-nuevo"); if(c) c.scrollIntoView({block:"start"}); return; }
   const d = sanear(BORRADOR);
   if(!d){ toast("Revisá los datos"); return; }
   if(d.productos.some(p => !p.nombre.trim())){ toast("Hay un producto sin nombre"); return; }
