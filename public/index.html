@@ -430,6 +430,62 @@
     .total strong{font-size:1.35rem}
     .pago{padding:10px 12px}
   }
+
+  /* Historial de pedidos y ventas */
+  .txt-corto{display:none}
+  @media(max-width:560px){ .txt-largo{display:none} .txt-corto{display:inline} .adm-kicker{display:none} .adm-marca img{height:28px} .adm-top-acc{flex-shrink:0} }
+  #admin.sin-guardar .adm-pie{display:none}
+  #admin.sin-guardar{padding-bottom:40px}
+  .hist-filtro{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:12px;margin:14px 0 12px;display:flex;flex-direction:column;gap:10px}
+  .hist-rapidos{display:flex;gap:6px;flex-wrap:wrap}
+  .chip-f{border:1px solid var(--linea);background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--gris)}
+  .chip-f.on{background:var(--vino);border-color:var(--vino);color:#fff}
+  .hist-fechas{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+  .hist-fechas label{display:flex;flex-direction:column;font-size:.75rem;font-weight:600;color:var(--gris);gap:4px;flex:1;min-width:130px}
+  .hist-fechas .adm-in{margin:0}
+  .hist-recargar{width:42px;height:42px;font-size:1.1rem}
+  .hist-res{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+  .hist-res div{background:#fff;border:1px solid var(--linea);border-radius:12px;padding:12px}
+  .hist-res b{display:block;font-family:var(--serif);font-size:1.3rem;line-height:1.1}
+  .hist-res span{font-size:.75rem;color:var(--gris)}
+  .adm-vacio{text-align:center;color:var(--gris);padding:40px 10px}
+  .adm-vacio small{font-size:.8rem}
+  .ped{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:14px;margin-bottom:10px}
+  .ped-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .ped-cab b{display:block;font-size:1rem}
+  .ped-fecha{font-size:.78rem;color:var(--gris)}
+  .ped-total{font-family:var(--serif);font-size:1.25rem;font-weight:600;white-space:nowrap}
+  .ped-datos{display:flex;flex-wrap:wrap;gap:6px 14px;margin:8px 0;font-size:.85rem;color:var(--tinta)}
+  .ped-wa{display:inline-flex;align-items:center;gap:5px;color:var(--verde);font-weight:700;text-decoration:none}
+  .ped-wa svg{width:16px;height:16px}
+  .ped-items{list-style:none;border-top:1px dashed var(--linea);padding-top:8px}
+  .ped-items li{display:flex;justify-content:space-between;gap:10px;font-size:.88rem;padding:3px 0}
+  .ped-items i{color:var(--vino);font-style:normal}
+  .ped-items em{color:var(--gris)}
+  .ped-obs{font-size:.84rem;color:var(--gris);margin-top:6px}
+  .ped-borrar{margin-top:8px;border:none;background:none;color:#b3201f;font:inherit;font-size:.78rem;font-weight:600;cursor:pointer;padding:4px 0}
+  .hist-ctrl{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .hist-ctrl label{font-size:.78rem;font-weight:600;color:var(--gris)}
+  .hist-ctrl select{margin-top:4px;min-width:200px}
+  .hist-mes{display:flex;align-items:center;gap:8px;cursor:pointer;padding-bottom:10px}
+  .hist-mes input{width:18px;height:18px;accent-color:var(--vino)}
+  .rank{list-style:none}
+  .rank li{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--linea);border-radius:12px;padding:10px 12px;margin-bottom:6px}
+  .rank-n{width:26px;height:26px;border-radius:50%;background:var(--crema);display:grid;place-items:center;font-weight:700;font-size:.8rem;flex-shrink:0}
+  .rank li:nth-child(1) .rank-n{background:var(--vino);color:#fff}
+  .rank-info{flex:1;min-width:0}
+  .rank-top{display:flex;justify-content:space-between;gap:10px;font-size:.92rem}
+  .rank-top span{font-weight:700;white-space:nowrap}
+  .rank-barra{height:7px;background:var(--crema);border-radius:999px;margin:6px 0 4px;overflow:hidden}
+  .rank-barra i{display:block;height:100%;background:var(--vino);border-radius:999px}
+  .rank small{font-size:.74rem;color:var(--gris)}
+  .mes-bloque{margin-bottom:18px}
+  @media(max-width:560px){
+    .hist-res{grid-template-columns:1fr 1fr}
+    .hist-res b{font-size:1.1rem}
+    .adm-barra{flex-wrap:wrap}.adm-barra .adm-btn{padding:10px 14px}
+    .ped-items li{font-size:.82rem}
+  }
 </style>
 </head>
 <body>
@@ -551,8 +607,10 @@
       <div id="lineas"></div>
       <div class="retiro" id="retiro">
         <h4>Reservá tu retiro</h4>
-        <label for="nombre">Nombre</label>
-        <input id="nombre" placeholder="¿A nombre de quién?">
+        <div class="dos">
+          <div><label for="nombre">Nombre</label><input id="nombre" placeholder="¿A nombre de quién?" autocomplete="name"></div>
+          <div><label for="wa">Tu WhatsApp</label><input id="wa" type="tel" inputmode="tel" placeholder="351 123 4567" autocomplete="tel"></div>
+        </div>
         <div class="dos">
           <div><label for="dia">Día</label><select id="dia"></select></div>
           <div><label for="hora">Horario</label><select id="hora"></select></div>
@@ -593,11 +651,11 @@
     <div class="adm-top-in">
       <div class="adm-marca"><img src="logo.png" alt=""><div><small class="adm-kicker">Del Rivera</small><h1>Panel del local</h1></div></div>
       <div class="adm-top-acc">
-        <button class="btn-sec" onclick="volverTienda()">← Ver la tienda</button>
-        <button class="btn-sec" onclick="cerrarSesion()">Cerrar sesión</button>
+        <button class="btn-sec" onclick="volverTienda()">← <span class="txt-largo">Ver la </span>tienda</button>
+        <button class="btn-sec" onclick="cerrarSesion()"><span class="txt-largo">Cerrar sesión</span><span class="txt-corto">Salir</span></button>
       </div>
     </div>
-    <div class="adm-tabs"><button class="adm-tab on" data-tab="productos">Productos y stock</button><button class="adm-tab" data-tab="categorias">Categorías</button><button class="adm-tab" data-tab="pagos">Pagos</button><button class="adm-tab" data-tab="local">Retiro y contacto</button></div>
+    <div class="adm-tabs"><button class="adm-tab on" data-tab="productos">Productos y stock</button><button class="adm-tab" data-tab="pedidos">Pedidos</button><button class="adm-tab" data-tab="ventas">Más vendidos</button><button class="adm-tab" data-tab="categorias">Categorías</button><button class="adm-tab" data-tab="pagos">Pagos</button><button class="adm-tab" data-tab="local">Retiro y contacto</button></div>
   </header>
   <main class="adm-main" id="admCuerpo"></main>
   <div class="adm-pie">
@@ -890,8 +948,26 @@ $("pagoDet").addEventListener("click", async e => {
 $("enviar").addEventListener("click", e => {
   if(!Object.keys(carrito).length){ e.preventDefault(); toast("Elegí al menos un corte"); return; }
   if(!pago){ e.preventDefault(); toast("Elegí cómo vas a pagar"); $("pagos").scrollIntoView({behavior:"smooth",block:"center"}); return; }
-  if(!$("nombre").value.trim()){ e.preventDefault(); toast("Poné tu nombre para la reserva"); $("nombre").focus(); }
+  if(!$("nombre").value.trim()){ e.preventDefault(); toast("Poné tu nombre para la reserva"); $("nombre").focus(); return; }
+  if($("wa").value.replace(/\D/g,"").length < 8){ e.preventDefault(); toast("Poné tu número de WhatsApp"); $("wa").focus(); return; }
+  registrarPedido();
 });
+
+// ===== Registro del pedido (para el historial del local) =====
+// Un mismo pedido lleva siempre el mismo id: si el cliente toca "Enviar" dos veces, se guarda una sola vez.
+let pedidoId = "", pedidoFirma = "";
+function nuevoId(){ try{ return crypto.randomUUID(); }catch(e){ return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12); } }
+function registrarPedido(){
+  const cuerpo = {nombre:$("nombre").value.trim(), whatsapp:$("wa").value.trim(), dia:$("dia").value, hora:$("hora").value,
+    pago:pagoTexto(), obs:$("obs").value.trim(), items:Object.values(carrito).map(it => ({id:it.id, g:it.g, prep:it.prep, nota:it.nota}))};
+  const firma = JSON.stringify(cuerpo);
+  if(firma !== pedidoFirma){ pedidoFirma = firma; pedidoId = nuevoId(); }
+  try{ localStorage.setItem("delrivera_cliente", JSON.stringify({nombre:cuerpo.nombre, wa:cuerpo.whatsapp})); }catch(e){}
+  fetch("/api/pedido", {method:"POST", keepalive:true, headers:{"Content-Type":"application/json"}, body: JSON.stringify({...cuerpo, id:pedidoId})})
+    .catch(() => {});
+}
+// Recordar nombre y WhatsApp del cliente para la próxima compra
+try{ const c = JSON.parse(localStorage.getItem("delrivera_cliente")); if(c){ $("nombre").value = c.nombre || ""; $("wa").value = c.wa || ""; } }catch(e){}
 
 // ===== Días, horarios y contacto =====
 // Minutos desde medianoche de un horario escrito como "9:00", "10.30" o "18"
@@ -930,7 +1006,7 @@ function pintarRetiroYContacto(){
   $("cWa").textContent = w.length >= 12 ? `+${w.slice(0,2)} ${w.slice(2,3)} ${w.slice(3,6)} ${w.slice(6,9)}-${w.slice(9)}` : "+" + w;
   $("cWaLink").href = "https://wa.me/" + w;
 }
-["nombre","hora","obs"].forEach(id => $(id).addEventListener("input", actualizar));
+["nombre","wa","hora","obs"].forEach(id => $(id).addEventListener("input", actualizar));
 $("dia").addEventListener("change", () => { pintarHoras(); actualizar(); });
 
 function pintarTodo(){ CATS = catsDe(TIENDA); if(filtro!=="todos" && !CATS[filtro]) filtro = "todos"; pintarFiltros(); pintarRetiroYContacto(); pintarPago(); actualizar(); }
@@ -966,7 +1042,7 @@ async function cargarTienda(){
     const r = await fetch("/api/tienda", {cache:"no-store"});
     if(!r.ok) throw 0;
     const j = await r.json(); servidorOk = true;
-    if(!j.datos || j.version === versionDatos) return;
+    if(!j.datos || (versionDatos && j.version <= versionDatos)) return;
     const d = sanear(j.datos); if(!d) return;
     versionDatos = j.version; TIENDA = d; pintarTodo();
     if(adminAbierto && !hayCambios){ BORRADOR = clon(TIENDA); pintarAdmin(); }
@@ -1018,7 +1094,7 @@ function mostrarAdmin(){
   if(adminAbierto) return;
   cerrarPanel(); cerrarModal();
   scrollTienda = window.scrollY;
-  BORRADOR = clon(TIENDA); hayCambios = false; adminAbierto = true;
+  BORRADOR = clon(TIENDA); hayCambios = false; adminAbierto = true; HIST.para = "";
   $("admin").hidden = false; document.body.classList.add("modo-admin");
   document.title = "Panel del local · Del Rivera";
   scrollInstant(0); pintarAdmin();
@@ -1057,6 +1133,8 @@ function pintarAdmin(){
   $("admGuardar").disabled = !hayCambios;
   $("admSalirConfirm").style.display = "none"; delete $("admSalirConfirm").dataset.ok;
   const B = BORRADOR, A = B.ajustes, c = $("admCuerpo");
+  $("admin").classList.toggle("sin-guardar", tab === "pedidos" || tab === "ventas");
+  if(tab === "pedidos" || tab === "ventas"){ pintarHistorial(c); return; }
   if(tab === "productos"){
     const sin = B.productos.filter(p=>!p.stock).length;
     const q = norm(busqueda);
@@ -1242,6 +1320,198 @@ $("fotoInput").addEventListener("change", async e => {
     toast((err && err.msg) || "No se pudo subir la foto. Probá de nuevo");
   }
   subiendo = null; pintarAdmin();
+});
+
+// ===== Historial: pedidos y más vendidos =====
+const HORA_AR = 3 * 3600e3, DIA_MS = 86400e3;
+const isoAR = ts => new Date(ts - HORA_AR).toISOString().slice(0, 10);          // fecha en Argentina (UTC-3)
+const sumarDias = (iso, n) => new Date(Date.parse(iso + "T12:00:00Z") + n * DIA_MS).toISOString().slice(0, 10);
+const DIAS_C = ["dom","lun","mar","mié","jue","vie","sáb"];
+const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+function fechaHora(ts){
+  const d = new Date(ts - HORA_AR);
+  return `${DIAS_C[d.getUTCDay()]} ${d.getUTCDate()}/${d.getUTCMonth()+1}/${String(d.getUTCFullYear()).slice(2)} · ${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`;
+}
+const nombreMes = ym => { const [y, m] = ym.split("-"); return MESES[+m - 1].replace(/^./, c => c.toUpperCase()) + " " + y; };
+const kgFmt = g => (g/1000).toLocaleString("es-AR", {maximumFractionDigits:2}) + " kg";
+function waLink(num){
+  let d = String(num).replace(/\D/g, "");
+  if(!d.startsWith("54")){ d = d.replace(/^0/, ""); d = "549" + d; }
+  return "https://wa.me/" + d;
+}
+function rango(clave){
+  const hoy = isoAR(Date.now());
+  if(clave === "hoy") return [hoy, hoy];
+  if(clave === "7") return [sumarDias(hoy, -6), hoy];
+  if(clave === "30") return [sumarDias(hoy, -29), hoy];
+  if(clave === "mes") return [hoy.slice(0, 8) + "01", hoy];
+  if(clave === "mesant"){ const fin = sumarDias(hoy.slice(0, 8) + "01", -1); return [fin.slice(0, 8) + "01", fin]; }
+  if(clave === "anio") return [hoy.slice(0, 5) + "01-01", hoy];
+  return null;
+}
+const HIST = {desde: rango("mes")[0], hasta: rango("mes")[1], lista: null, para: "", cargando: false, error: "", buscar: "", porMes: false, orden: "kg", rapido: "mes"};
+
+async function cargarPedidos(forzar){
+  const clave = HIST.desde + "|" + HIST.hasta;
+  if(!forzar && HIST.para === clave && HIST.lista) return;
+  HIST.cargando = true; HIST.error = ""; if(adminAbierto) pintarAdmin();
+  try{
+    const r = await fetch(`/api/pedidos?desde=${HIST.desde}&hasta=${HIST.hasta}`, {headers: authHeaders(), cache: "no-store"});
+    if(r.status === 401){ HIST.cargando = false; sesionVencida(); return; }
+    const j = await r.json().catch(() => ({}));
+    if(!r.ok) throw {msg: j.error};
+    HIST.lista = j.pedidos || []; HIST.para = clave;
+  }catch(e){ HIST.error = (e && e.msg) || "No se pudieron cargar los pedidos. Revisá la conexión."; }
+  HIST.cargando = false;
+  if(adminAbierto && (tab === "pedidos" || tab === "ventas")) pintarAdmin();
+}
+
+function barraFechas(){
+  const r = [["hoy","Hoy"],["7","7 días"],["30","30 días"],["mes","Este mes"],["mesant","Mes pasado"],["anio","Este año"]];
+  return `<div class="hist-filtro">
+    <div class="hist-rapidos">${r.map(([k,v]) => `<button class="chip-f ${HIST.rapido===k?'on':''}" data-rango="${k}">${v}</button>`).join("")}</div>
+    <div class="hist-fechas">
+      <label>Desde <input type="date" class="adm-in" data-f="desde" value="${HIST.desde}" max="${HIST.hasta}"></label>
+      <label>Hasta <input type="date" class="adm-in" data-f="hasta" value="${HIST.hasta}" min="${HIST.desde}"></label>
+      <button class="adm-mas hist-recargar" data-acc="recargar" title="Actualizar" aria-label="Actualizar">↻</button>
+    </div>
+  </div>`;
+}
+
+function pintarHistorial(c){
+  const clave = HIST.desde + "|" + HIST.hasta;
+  if(HIST.para !== clave && !HIST.cargando && !HIST.error) setTimeout(() => cargarPedidos(), 0);
+  let cuerpo;
+  if(HIST.cargando || (HIST.para !== clave && !HIST.error)) cuerpo = `<p class="adm-ayuda">Cargando pedidos…</p>`;
+  else if(HIST.error) cuerpo = `<p class="adm-estado err">${esc(HIST.error)}</p><button class="adm-btn" data-acc="recargar" style="padding:10px 14px">Reintentar</button>`;
+  else cuerpo = tab === "pedidos" ? vistaPedidos() : vistaVentas();
+  c.innerHTML = barraFechas() + cuerpo;
+}
+
+function resumen(L){
+  const total = L.reduce((s,p) => s + p.total, 0), g = L.reduce((s,p) => s + p.items.reduce((a,i) => a + i.g, 0), 0);
+  return `<div class="hist-res">
+    <div><b>${L.length}</b><span>pedido${L.length===1?'':'s'}</span></div>
+    <div><b>${fmt(total)}</b><span>total estimado</span></div>
+    <div><b>${kgFmt(g)}</b><span>vendidos</span></div>
+    <div><b>${L.length ? fmt(total / L.length) : "—"}</b><span>promedio por pedido</span></div>
+  </div>`;
+}
+
+function vistaPedidos(){
+  const q = norm(HIST.buscar);
+  const L = HIST.lista.filter(p => !q || norm(p.nombre).includes(q) || p.whatsapp.includes(q.replace(/\D/g,"") || "@@") || p.items.some(i => norm(i.nombre).includes(q)));
+  return `${resumen(HIST.lista)}
+    <div class="adm-barra">
+      <input class="adm-in" id="pedBuscar" placeholder="Buscar por cliente, WhatsApp o corte…" value="${esc(HIST.buscar)}">
+      <button class="adm-btn" data-acc="csv" ${HIST.lista.length?'':'disabled'}>Descargar Excel (CSV)</button>
+    </div>
+    ${!HIST.lista.length ? `<p class="adm-vacio">No hay pedidos en estas fechas.<br><small>Los pedidos se registran cuando el cliente toca “Enviar pedido por WhatsApp”.</small></p>`
+      : !L.length ? `<p class="adm-ayuda">Ningún pedido coincide con “${esc(HIST.buscar)}”.</p>`
+      : L.map(p => `<article class="ped">
+        <header class="ped-cab">
+          <div><b>${esc(p.nombre)}</b><span class="ped-fecha">${fechaHora(p.ts)}</span></div>
+          <div class="ped-total">${fmt(p.total)}</div>
+        </header>
+        <div class="ped-datos">
+          <a class="ped-wa" href="${waLink(p.whatsapp)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20l1.3-4A8 8 0 1 1 8 19z"/></svg>${esc(p.whatsapp)}</a>
+          ${p.retiro && p.retiro.dia ? `<span>🗓 Retira ${esc(p.retiro.dia)}${p.retiro.hora ? " · " + esc(p.retiro.hora) : ""}</span>` : ""}
+          ${p.pago ? `<span>💳 ${esc(p.pago)}</span>` : ""}
+        </div>
+        <ul class="ped-items">${p.items.map(i => `<li><span><b>${kgFmt(i.g)}</b> ${esc(i.nombre)}${i.prep ? ` <i>— ${esc(i.prep)}</i>` : ""}${i.nota ? ` <em>“${esc(i.nota)}”</em>` : ""}</span><span>${fmt(i.subtotal)}</span></li>`).join("")}</ul>
+        ${p.obs ? `<p class="ped-obs">Aclaraciones: ${esc(p.obs)}</p>` : ""}
+        <button class="ped-borrar" data-acc="borrarPed" data-id="${esc(p.id)}">Borrar</button>
+      </article>`).join("")}`;
+}
+
+function agrupar(L){
+  const m = new Map();
+  for(const p of L) for(const i of p.items){
+    const k = i.id + "|" + i.nombre;
+    const a = m.get(k) || {nombre: i.nombre, cat: i.catNombre || "", g: 0, monto: 0, pedidos: new Set()};
+    a.g += i.g; a.monto += i.subtotal; a.pedidos.add(p.id); m.set(k, a);
+  }
+  const campo = {kg: x => x.g, monto: x => x.monto, veces: x => x.pedidos.size}[HIST.orden];
+  return [...m.values()].sort((a, b) => campo(b) - campo(a));
+}
+function tablaVentas(L){
+  const filas = agrupar(L);
+  if(!filas.length) return `<p class="adm-ayuda">Sin ventas en este período.</p>`;
+  const campo = {kg: x => x.g, monto: x => x.monto, veces: x => x.pedidos.size}[HIST.orden], max = campo(filas[0]) || 1;
+  return `<ol class="rank">${filas.map((f, n) => `<li>
+      <span class="rank-n">${n + 1}</span>
+      <div class="rank-info">
+        <div class="rank-top"><b>${esc(f.nombre)}</b><span>${HIST.orden === "monto" ? fmt(f.monto) : HIST.orden === "veces" ? f.pedidos.size + " pedido" + (f.pedidos.size===1?"":"s") : kgFmt(f.g)}</span></div>
+        <div class="rank-barra"><i style="width:${Math.max(2, campo(f) / max * 100)}%"></i></div>
+        <small>${kgFmt(f.g)} · ${f.pedidos.size} pedido${f.pedidos.size===1?'':'s'} · ${fmt(f.monto)}${f.cat ? " · " + esc(f.cat) : ""}</small>
+      </div>
+    </li>`).join("")}</ol>`;
+}
+function vistaVentas(){
+  if(!HIST.lista.length) return `<p class="adm-vacio">No hay pedidos en estas fechas.</p>`;
+  const ctrl = `<div class="hist-ctrl">
+    <label>Ordenar por <select class="adm-in" data-orden>
+      <option value="kg" ${HIST.orden==="kg"?"selected":""}>Kilos vendidos</option>
+      <option value="monto" ${HIST.orden==="monto"?"selected":""}>Plata facturada</option>
+      <option value="veces" ${HIST.orden==="veces"?"selected":""}>Cantidad de pedidos</option>
+    </select></label>
+    <label class="hist-mes"><input type="checkbox" data-pormes ${HIST.porMes?"checked":""}> Separar por mes</label>
+  </div>`;
+  if(!HIST.porMes) return resumen(HIST.lista) + ctrl + tablaVentas(HIST.lista);
+  const meses = new Map();
+  for(const p of HIST.lista){ const ym = isoAR(p.ts).slice(0, 7); (meses.get(ym) || meses.set(ym, []).get(ym)).push(p); }
+  return resumen(HIST.lista) + ctrl + [...meses.entries()].sort((a, b) => a[0] < b[0] ? 1 : -1)
+    .map(([ym, L]) => `<div class="mes-bloque"><h4 class="adm-cat">${nombreMes(ym)} · ${L.length} pedido${L.length===1?'':'s'} · ${fmt(L.reduce((s,p) => s + p.total, 0))}</h4>${tablaVentas(L)}</div>`).join("");
+}
+
+function descargarCSV(){
+  const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const filas = [["Fecha","Hora","Cliente","WhatsApp","Producto","Categoría","Preparación","Nota","Kilos","Precio por kg","Subtotal","Total del pedido","Pago","Retiro","Aclaraciones"]];
+  for(const p of [...HIST.lista].reverse()){
+    const d = new Date(p.ts - HORA_AR), fecha = d.toISOString().slice(0, 10), hora = d.toISOString().slice(11, 16);
+    for(const i of p.items) filas.push([fecha, hora, p.nombre, p.whatsapp, i.nombre, i.catNombre, i.prep, i.nota,
+      (i.g / 1000).toString().replace(".", ","), i.precioKg, i.subtotal, p.total, p.pago, [p.retiro?.dia, p.retiro?.hora].filter(Boolean).join(" "), p.obs]);
+  }
+  const csv = "﻿" + filas.map(f => f.map(q).join(";")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type: "text/csv;charset=utf-8"}));
+  a.download = `pedidos-delrivera-${HIST.desde}-a-${HIST.hasta}.csv`;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+// Eventos del historial
+$("admCuerpo").addEventListener("click", async e => {
+  const r = e.target.closest("[data-rango]");
+  if(r){ const [d, h] = rango(r.dataset.rango); HIST.desde = d; HIST.hasta = h; HIST.rapido = r.dataset.rango; pintarAdmin(); return; }
+  const b = e.target.closest("[data-acc]"); if(!b) return;
+  if(b.dataset.acc === "recargar"){ HIST.error = ""; cargarPedidos(true); }
+  else if(b.dataset.acc === "csv") descargarCSV();
+  else if(b.dataset.acc === "borrarPed"){
+    if(b.dataset.seguro !== "1"){ b.dataset.seguro = "1"; b.textContent = "¿Seguro? Tocá de nuevo para borrar"; return; }
+    b.disabled = true; b.textContent = "Borrando…";
+    try{
+      const res = await fetch("/api/pedidos?id=" + encodeURIComponent(b.dataset.id), {method: "DELETE", headers: authHeaders()});
+      if(res.status === 401){ sesionVencida(); return; }
+      if(!res.ok) throw 0;
+      HIST.lista = HIST.lista.filter(p => p.id !== b.dataset.id); toast("Pedido borrado"); pintarAdmin();
+    }catch(err){ toast("No se pudo borrar. Probá de nuevo"); b.disabled = false; b.textContent = "Borrar"; }
+  }
+});
+$("admCuerpo").addEventListener("change", e => {
+  const t = e.target;
+  if(t.dataset.f){
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(t.value)) return;
+    HIST[t.dataset.f] = t.value; HIST.rapido = "";
+    if(HIST.desde > HIST.hasta){ if(t.dataset.f === "desde") HIST.hasta = HIST.desde; else HIST.desde = HIST.hasta; }
+    pintarAdmin();
+  }
+  else if(t.dataset.orden !== undefined){ HIST.orden = t.value; pintarAdmin(); }
+  else if(t.dataset.pormes !== undefined){ HIST.porMes = t.checked; pintarAdmin(); }
+});
+$("admCuerpo").addEventListener("input", e => {
+  if(e.target.id !== "pedBuscar") return;
+  HIST.buscar = e.target.value; const pos = e.target.selectionStart; pintarAdmin();
+  const nb = $("pedBuscar"); if(nb){ nb.focus(); nb.setSelectionRange(pos, pos); }
 });
 
 async function guardarAdmin(){

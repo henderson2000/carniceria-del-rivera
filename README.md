@@ -2,14 +2,17 @@
 
 Tienda online: los clientes eligen cortes, reservan el retiro y mandan el pedido por WhatsApp.
 El local administra productos, stock, precios, fotos, categorías, pagos y horarios desde el panel
-(la personita al pie de la página, o la dirección terminada en `#panel`).
+(la personita al pie de la página, o la dirección terminada en `#panel`): también el historial de pedidos
+con el WhatsApp de cada cliente y el ranking de cortes más vendidos, filtrados por fechas.
 
 ## Publicar en Vercel (una sola vez)
 
 1. Importá este repositorio en Vercel (**Add New → Project**). No hace falta cambiar nada de la configuración.
 2. En el proyecto: **Storage → Create → Blob** (acceso *público*) y conectalo al proyecto.
-   Esto crea la variable `BLOB_READ_WRITE_TOKEN`, que es donde se guardan los datos y las fotos.
-3. **Deployments → Redeploy** para que tome el almacenamiento.
+   Ahí se guardan las fotos de los productos (`BLOB_READ_WRITE_TOKEN`).
+3. Instalá **Upstash for Redis** desde el Marketplace de Vercel (plan Free, región São Paulo) y conectalo al proyecto.
+   Ahí se guardan el catálogo y el historial de pedidos (`KV_REST_API_URL` y `KV_REST_API_TOKEN`).
+4. **Deployments → Redeploy** para que tome todo.
 
 ### Opcional (recomendado)
 En **Settings → Environment Variables**:
@@ -22,10 +25,12 @@ En **Settings → Environment Variables**:
 npm install
 npm run dev
 ```
-Abrí http://localhost:3000. Sin Blob configurado, los datos se guardan en la carpeta `.datos-local`.
+Abrí http://localhost:3000. Sin Redis ni Blob configurados, todo se guarda en la carpeta `.datos-local`.
 
 ## Estructura
 - `public/` – la página (`index.html`), logo, fotos de productos y créditos de las fotos.
 - `api/tienda.js` – lee y guarda el catálogo (guardar requiere sesión).
+- `api/pedido.js` – registra cada pedido que el cliente manda por WhatsApp (con su número).
+- `api/pedidos.js` – historial de pedidos por fechas para el panel (requiere sesión).
 - `api/login.js` – verifica usuario y contraseña en el servidor y da una sesión de 12 horas.
 - `api/foto.js` – sube fotos de productos a Vercel Blob.

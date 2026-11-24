@@ -1,8 +1,8 @@
 import {leerCatalogo, guardarCatalogo, tokenValido, validar, json} from "./_lib.js";
 
-// GET /api/tienda → catálogo actual (lo usan todos los visitantes)
+// GET /api/tienda → catálogo actual. La red de Vercel guarda la respuesta 15 s para no consultar la base en cada visita.
 export async function GET(){
-  try{ return json(await leerCatalogo()); }
+  try{ return json(await leerCatalogo(), 200, "public, max-age=0, s-maxage=15, stale-while-revalidate=60"); }
   catch(e){ console.error(e); return json({error:"No se pudo leer el catálogo"}, 500); }
 }
 
@@ -15,5 +15,5 @@ export async function PUT(request){
   const datos = validar(cuerpo);
   if(!datos) return json({error:"Revisá los datos: falta alguna categoría o producto"}, 400);
   try{ const version = await guardarCatalogo(datos); return json({ok:true, version, datos}); }
-  catch(e){ console.error(e); return json({error:"No se pudo guardar. ¿Está conectado el almacenamiento Blob en Vercel?"}, 500); }
+  catch(e){ console.error(e); return json({error:"No se pudo guardar. ¿Está conectada la base de datos en Vercel?"}, 500); }
 }
