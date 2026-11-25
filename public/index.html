@@ -489,9 +489,11 @@
   .hist-rapidos{display:flex;gap:6px;flex-wrap:wrap}
   .chip-f{border:1px solid var(--linea);background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--gris)}
   .chip-f.on{background:var(--vino);border-color:var(--vino);color:#fff}
-  .hist-fechas{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
-  .hist-fechas label{display:flex;flex-direction:column;font-size:.75rem;font-weight:600;color:var(--gris);gap:4px;flex:1;min-width:130px}
-  .hist-fechas .adm-in{margin:0}
+  .hist-fechas{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:end}
+  .hist-fechas label{display:flex;flex-direction:column;font-size:.75rem;font-weight:600;color:var(--gris);gap:4px;min-width:0}
+  .hist-fechas .adm-in{margin:0;width:100%;min-width:0;max-width:100%;display:block;-webkit-appearance:none;appearance:none;padding-left:10px;padding-right:10px;text-align:left}
+  .hist-fechas input::-webkit-date-and-time-value{text-align:left}
+  .hist-fechas .hist-recargar{flex:none}
   .hist-recargar{width:42px;height:42px;font-size:1.1rem}
   .hist-res{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
   .hist-res div{background:#fff;border:1px solid var(--linea);border-radius:12px;padding:12px}
