@@ -183,8 +183,11 @@ export function validar(d){
     whatsapp: txt(a.whatsapp, 20).replace(/\D/g, ""), direccion: txt(a.direccion, 150), horarioTexto: txt(a.horarioTexto, 150),
     dias: Array.isArray(a.dias) ? [...new Set(a.dias.filter(x => Number.isInteger(x) && x >= 0 && x <= 6))] : [1,2,3,4,5,6],
     horarios: Array.isArray(a.horarios) ? a.horarios.slice(0, 30).map(h => txt(h, 10).trim()).filter(Boolean) : [],
-    alias: txt(a.alias, 40), cbu: txt(a.cbu, 30), titular: txt(a.titular, 80)
+    alias: txt(a.alias, 40), cbu: txt(a.cbu, 30), titular: txt(a.titular, 80),
+    mapsLink: /^https:\/\/[^\s"'<>]+$/i.test(String(a.mapsLink || "").trim()) ? txt(String(a.mapsLink).trim(), 300) : ""
   };
+  // Si en "Dirección" llega un link, se guarda como link del mapa
+  if(/^https?:\/\//i.test(ajustes.direccion.trim())){ if(!ajustes.mapsLink && /^https:/i.test(ajustes.direccion.trim())) ajustes.mapsLink = ajustes.direccion.trim(); ajustes.direccion = "Ricardo Rojas 9031 esq. Manuel de Falla · Córdoba"; }
   return {categorias, productos, ajustes, portada: validarPortada(d.portada)};
 }
 
