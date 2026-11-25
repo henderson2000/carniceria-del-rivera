@@ -245,6 +245,7 @@
   .retiro label{display:block;font-size:.82rem;font-weight:600;margin-bottom:5px}
   .retiro input,.retiro select,.retiro textarea{width:100%;border:1px solid var(--linea);border-radius:10px;padding:11px;font:inherit;background:#fff;margin-bottom:12px;color:var(--tinta)}
   .dos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:600px){.dos.datos{grid-template-columns:1fr}}
   .pagos{display:grid;gap:8px;margin-bottom:12px}
   .pago{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--linea);background:#fff;border-radius:12px;padding:12px 14px;cursor:pointer;text-align:left;width:100%;font:inherit;color:var(--tinta);transition:.15s}
   .pago:hover{border-color:var(--vino)}
@@ -755,7 +756,7 @@
       <div id="lineas"></div>
       <div class="retiro" id="retiro">
         <h4>Tus datos</h4>
-        <div class="dos">
+        <div class="dos datos">
           <div><label for="nombre">Nombre</label><input id="nombre" placeholder="¿A nombre de quién?" autocomplete="name"></div>
           <div><label for="wa">Tu WhatsApp</label><input id="wa" type="tel" inputmode="tel" placeholder="351 123 4567" autocomplete="tel"></div>
         </div>
